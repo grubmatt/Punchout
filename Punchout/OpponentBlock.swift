@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class OpponentPunch: SKSpriteNode {
+class OpponentBlock: SKSpriteNode {
     init(imageName: String){
         let texture = SKTexture(imageNamed: imageName)
         super.init(texture: texture, color: SKColor.clearColor(), size: CGSize(width: 50, height: 50))
