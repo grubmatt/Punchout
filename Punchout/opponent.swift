@@ -27,15 +27,23 @@ class Opponent : SKSpriteNode {
     
     func sendPunch(scene: SKScene){
         let punch = OpponentPunch(imageName: "circle")
-        punch.position.x = self.position.x
+        punch.position.x = self.position.x-10
         punch.position.y = self.position.y - self.size.height/2
         scene.addChild(punch)
-        let movePunchAction = SKAction.moveTo(CGPoint(x:self.position.x,y: 0 - punch.size.height), duration: 2.0)
+        let movePunchAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y/2), duration: 0.5)
+        let returnPunchAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y-10), duration: 0.5)
         let removePunchAction = SKAction.removeFromParent()
-        punch.runAction(SKAction.sequence([movePunchAction,removePunchAction]))
+        punch.runAction(SKAction.sequence([movePunchAction,returnPunchAction, removePunchAction]))
     }
     
     func sendBlock(scene: SKScene){
-        
+        let block = OpponentBlock(imageName: "Spaceship")
+        block.position.x = self.position.x+10
+        block.position.y = self.position.y - self.size.height/2
+        scene.addChild(block)
+        let moveBlockAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y/2), duration: 0.5)
+        let returnBlockAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y-10), duration: 0.5)
+        let removeBlockAction = SKAction.removeFromParent()
+        block.runAction(SKAction.sequence([moveBlockAction,returnBlockAction, removeBlockAction]))
     }
 }

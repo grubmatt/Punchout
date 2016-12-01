@@ -20,6 +20,7 @@
 		015EA56A1DEFB30200710A8D /* StartGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015EA5691DEFB30200710A8D /* StartGameScene.swift */; };
 		682215A11DEFB0D100EE3186 /* opponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215A01DEFB0D100EE3186 /* opponent.swift */; };
 		682215AF1DEFC22F00EE3186 /* OpponentPunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */; };
+		682215B11DEFCC5600EE3186 /* OpponentBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215B01DEFCC5600EE3186 /* OpponentBlock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		015EA5691DEFB30200710A8D /* StartGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartGameScene.swift; sourceTree = "<group>"; };
 		682215A01DEFB0D100EE3186 /* opponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = opponent.swift; sourceTree = "<group>"; };
 		682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpponentPunch.swift; sourceTree = "<group>"; };
+		682215B01DEFCC5600EE3186 /* OpponentBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpponentBlock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				682215A01DEFB0D100EE3186 /* opponent.swift */,
 				015EA5671DEFB24900710A8D /* fist.swift */,
 				682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */,
+				682215B01DEFCC5600EE3186 /* OpponentBlock.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				015EA56A1DEFB30200710A8D /* StartGameScene.swift in Sources */,
 				015EA5681DEFB24900710A8D /* fist.swift in Sources */,
 				015EA5391DEFA83B00710A8D /* GameScene.swift in Sources */,
+				682215B11DEFCC5600EE3186 /* OpponentBlock.swift in Sources */,
 				015EA53B1DEFA83B00710A8D /* GameViewController.swift in Sources */,
 				682215AF1DEFC22F00EE3186 /* OpponentPunch.swift in Sources */,
 				015EA5331DEFA83B00710A8D /* AppDelegate.swift in Sources */,
