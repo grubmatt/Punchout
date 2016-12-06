@@ -61,7 +61,28 @@ class Opponent : SKSpriteNode {
         
     }
     
-    func blocked(){
-    
+    func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat, speed: CGFloat, position: CGFloat) -> (CGFloat, CGFloat) {
+        var changeDirection = false
+        let newPosition = position - CGFloat(speed)
+        var newSpeed = speed
+
+        // forces opponent to switch direction if it hits the edge
+        if(newPosition > upperBounds || newPosition < lowerBounds){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        let randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            newSpeed *= -1
+        }
+        
+        changeDirection = false
+        
+        return (newPosition, newSpeed)
     }
 }
