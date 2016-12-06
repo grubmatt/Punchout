@@ -11,8 +11,9 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    //let player:Player = Player()
-    let opponent:Opponent = Opponent()
+    let user : player = player()
+    let opponent : Opponent = Opponent()
+    
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
     
@@ -22,8 +23,6 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        let backgroundColor = SKColor.blackColor()
-        
         background.position = CGPoint(
             x: frame.size.width / 2,
             y: frame.size.height / 2)
@@ -32,7 +31,7 @@ class GameScene: SKScene {
         setupOpponent()
 
         setupPlayer()
-        //setupPlayer()
+//        setupPlayer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -66,7 +65,7 @@ class GameScene: SKScene {
         //
         //            self.addChild(sprite)
         //        }
-//        sendOpponentPunch()
+        //sendOpponentPunch()
         //sendOpponentBlock()
     }
     
@@ -78,9 +77,6 @@ class GameScene: SKScene {
         let upperBounds = size.height / 2
         let lowerBounds = CGFloat(0)
         
-        user.moveFists(self,
-                       leftBound: leftBounds, rightBound: rightBounds,
-                       upBound: upperBounds, lowBound: lowerBounds)
         moveOpponent()
     }
     
@@ -109,8 +105,6 @@ class GameScene: SKScene {
         if(changeDirection == true){
             self.opponentSpeed *= -1
         }
-        
-
     }
     
     func sendOpponentPunch(){
@@ -133,7 +127,6 @@ class GameScene: SKScene {
     
     
     // MARK: - Player Methods
-    
     func setupPlayer(){
         user.block_fist.position = CGPoint(
             x: size.width/2 - user.block_fist.size.width/2,
