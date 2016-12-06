@@ -8,18 +8,31 @@
 
 import SpriteKit
 
-let leftBounds = CGFloat(30)
-var rightBounds = CGFloat(0)
+
 //let block_fist : Fist = Fist(Fisttype: "block")
 //let punch_fist : Fist = Fist(Fisttype: "punch")
 
 class GameScene: SKScene {
+    
+    //let player:Player = Player()
+    let opponent:Opponent = Opponent()
+    let leftBounds = CGFloat(0)
+    let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
+    
+    var opponentSpeed = CGFloat(5)
+    var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
         backgroundColor = SKColor.blackColor()
+        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        addChild(background)
+        
         setupOpponent()
         //setupPlayer()
+        
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -40,50 +53,74 @@ class GameScene: SKScene {
         //
         //            self.addChild(sprite)
         //        }
+        sendOpponentPunch()
+        //sendOpponentBlock()
+
+
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        moveOpponent()
     }
     
     // MARK: - Opponent Methods
     func setupOpponent(){
-        let tempOppo:Opponent = Opponent()
-        let xPositionStart:CGFloat = size.width/2
-        tempOppo.position = CGPoint(x:xPositionStart,
-                                    y:CGFloat(self.size.height / 1.5))
-        addChild(tempOppo)
+        opponent.position = CGPoint(x:frame.size.width / 2,
+                                    y:frame.size.height / 1.6)
+        addChild(opponent)
     }
     
-//    func invokeOpponentPunch(){
-//        let sendPunch = SKAction.runBlock(){
-//            self.sendOpponentPunch()
-//        }
-//        let waitToSendPunch = SKAction.waitForDuration(1.5)
-//        let invaderFire = SKAction.sequence([fireBullet,waitToFireInvaderBullet])
-//        let repeatForeverAction = SKAction.repeatActionForever(invaderFire)
-//        runAction(repeatForeverAction)
-//    }
-//    
-//    func sendOpponentPunch(){
-//        if(invadersWhoCanFire.isEmpty){
-//            levelNum += 1
-//            levelComplete()
-//        }else{
-//            let randomInvader = invadersWhoCanFire.randomElement()
-//            randomInvader.fireBullet(self)
-//        }
-//    }
+    func moveOpponent(){
+        var changeDirection = false
+        opponent.position.x -= CGFloat(self.opponentSpeed)
+        
+        // forces opponent to switch direction if it hits the edge
+        if(opponent.position.x > self.rightBounds - opponent.size.width || opponent.position.x < self.leftBounds + opponent.size.width){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        let randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            self.opponentSpeed *= -1
+        }
+        
+
+    }
+    
+    func sendOpponentPunch(){
+        let sendPunch = SKAction.runBlock(){
+            self.opponent.sendPunch(self)
+        }
+        let waitToSendPunch = SKAction.waitForDuration(1.5)
+        let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
+        runAction(opponentPunch)
+    }
+    
+    func sendOpponentBlock(){
+        let sendBlock = SKAction.runBlock(){
+            self.opponent.sendBlock(self)
+        }
+        let waitToSendBlock = SKAction.waitForDuration(1.5)
+        let opponentBlock = SKAction.sequence([sendBlock,waitToSendBlock])
+        runAction(opponentBlock)
+    }
     
     
     // MARK: - Player Methods
-//    func setupPlayer(){
-//        block_fist.position = CGPoint(x: size.width/2 - 70,
-//                                      y: CGFloat(self.size.height / 2) - 140)
-//        punch_fist.position = CGPoint(x: size.width/2 + 70,
-//                                      y: CGFloat(self.size.height / 2) - 140)
-//        
-//        addChild(block_fist)
-//        addChild(punch_fist)
-//    }
+    //    func setupPlayer(){
+    //        block_fist.position = CGPoint(x: size.width/2 - 70,
+    //                                      y: CGFloat(self.size.height / 2) - 140)
+    //        punch_fist.position = CGPoint(x: size.width/2 + 70,
+    //                                      y: CGFloat(self.size.height / 2) - 140)
+    //
+    //        addChild(block_fist)
+    //        addChild(punch_fist)
+    //    }
+
 }
