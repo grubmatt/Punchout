@@ -8,42 +8,50 @@
 
 import SpriteKit
 
-let leftBounds = CGFloat(30)
-var rightBounds = CGFloat(0)
-//let block_fist : Fist = Fist(Fisttype: "block")
-//let punch_fist : Fist = Fist(Fisttype: "punch")
+
+
+
+//let block_fist : fist = fist(fisttype: "left")
+//let punch_fist : fist = fist(fisttype: "right")
 
 class GameScene: SKScene {
+    
+    let user : player = player()
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
         backgroundColor = SKColor.blackColor()
         setupOpponent()
-        //setupPlayer()
+        setupPlayer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         
-        //        for touch in touches {
-        //            let location = touch.locationInNode(self)
-        //
-        //            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-        //
-        //            sprite.xScale = 0.5
-        //            sprite.yScale = 0.5
-        //            sprite.position = location
-        //
-        //            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-        //
-        //            sprite.runAction(SKAction.repeatActionForever(action))
-        //
-        //            self.addChild(sprite)
-        //        }
+        let touch = touches.first! as UITouch
+        let touchLocation = touch.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(touchLocation)
+        
+        if (touchedNode.name == "punch") {
+            user.punch_fist.punch(self)
+        } else if (touchedNode.name == "block") {
+            user.block_fist.block(self)
+        } else {
+            
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        let leftBounds = size.width / 10
+        let rightBounds = size.width / 10 * CGFloat(9)
+        let upperBounds = size.height / 2
+        let lowerBounds = CGFloat(0)
+        
+        user.moveFists(self,
+                       leftBound: leftBounds, rightBound: rightBounds,
+                       upBound: upperBounds, lowBound: lowerBounds)
     }
     
     // MARK: - Opponent Methods
@@ -77,13 +85,12 @@ class GameScene: SKScene {
     
     
     // MARK: - Player Methods
-//    func setupPlayer(){
-//        block_fist.position = CGPoint(x: size.width/2 - 70,
-//                                      y: CGFloat(self.size.height / 2) - 140)
-//        punch_fist.position = CGPoint(x: size.width/2 + 70,
-//                                      y: CGFloat(self.size.height / 2) - 140)
-//        
-//        addChild(block_fist)
-//        addChild(punch_fist)
-//    }
+    func setupPlayer(){
+        user.block_fist.position = CGPoint(x: size.width/2 - user.block_fist.size.width/2,
+                                           y: size.height/2 - user.block_fist.size.height/2)
+        user.punch_fist.position = CGPoint(x: size.width/2 + user.punch_fist.size.width/2,
+                                           y: size.height/2 - user.punch_fist.size.height/2)
+        addChild(user.block_fist)
+        addChild(user.punch_fist)
+    }
 }
