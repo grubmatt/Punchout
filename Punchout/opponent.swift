@@ -11,10 +11,13 @@ import SpriteKit
 
 class Opponent : SKSpriteNode {
     
+    var points = 0
+    
     init() {
-        let texture = SKTexture(imageNamed: "opponent-\(1)")
+        let texture = SKTexture(imageNamed: "opponent_1")
         super.init(texture: texture, color: SKColor.clearColor(), size: texture.size())
         self.name = "opponent"
+        self.setScale(1.5)
         
         // preparing opponent for collisions once we add physics...
         
@@ -25,25 +28,39 @@ class Opponent : SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
+//    func animate(){
+//        var opponentTextures:[SKTexture] = []
+//        for i in 0...1 {
+//            opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
+//        }
+//        let opponentAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15))
+//        self.runAction(opponentAnimation)
+//        
+//    }
+
+    
     func sendPunch(scene: SKScene){
-        let punch = OpponentPunch(imageName: "circle")
-        punch.position.x = self.position.x-10
-        punch.position.y = self.position.y - self.size.height/2
-        scene.addChild(punch)
-        let movePunchAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y/2), duration: 0.5)
-        let returnPunchAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y-10), duration: 0.5)
-        let removePunchAction = SKAction.removeFromParent()
-        punch.runAction(SKAction.sequence([movePunchAction,returnPunchAction, removePunchAction]))
+        var opponentTextures:[SKTexture] = []
+        for i in 1...3 {
+            opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
+        }
+        opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15)
+        self.runAction(opponentAnimation)
+        
     }
     
     func sendBlock(scene: SKScene){
-        let block = OpponentBlock(imageName: "Spaceship")
-        block.position.x = self.position.x+10
-        block.position.y = self.position.y - self.size.height/2
-        scene.addChild(block)
-        let moveBlockAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y/2), duration: 0.5)
-        let returnBlockAction = SKAction.moveTo(CGPoint(x:self.position.x,y: self.position.y-10), duration: 0.5)
-        let removeBlockAction = SKAction.removeFromParent()
-        block.runAction(SKAction.sequence([moveBlockAction,returnBlockAction, removeBlockAction]))
+        var opponentTextures:[SKTexture] = []
+        opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
+        opponentTextures.append(SKTexture(imageNamed: "opponent_block"))
+        opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15)
+        self.runAction(opponentAnimation)
+        
+    }
+    
+    func blocked(){
+    
     }
 }
