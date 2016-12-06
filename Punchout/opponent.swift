@@ -21,6 +21,7 @@ class Opponent : SKSpriteNode {
         
         // preparing opponent for collisions once we add physics...
         
+        animate()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -28,15 +29,15 @@ class Opponent : SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
-//    func animate(){
-//        var opponentTextures:[SKTexture] = []
-//        for i in 0...1 {
-//            opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
-//        }
-//        let opponentAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15))
-//        self.runAction(opponentAnimation)
-//        
-//    }
+    func animate(){
+        var opponentTextures:[SKTexture] = []
+        for i in 0...1 {
+            opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
+        }
+        let opponentAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15))
+        self.runAction(opponentAnimation)
+        
+    }
 
     
     func sendPunch(scene: SKScene){
