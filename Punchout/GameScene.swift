@@ -19,7 +19,10 @@ class GameScene: SKScene {
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
     
-    var opponentSpeed = CGFloat(5)
+    var opponentUpperBound:CGFloat = 0.0
+    var opponentLowerBound:CGFloat = 0.0
+    var opponentxSpeed = CGFloat(3)
+    var opponentySpeed = CGFloat(3)
     var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
     
     override func didMoveToView(view: SKView) {
@@ -69,11 +72,14 @@ class GameScene: SKScene {
         opponent.position = CGPoint(x:frame.size.width / 2,
                                     y:frame.size.height / 1.6)
         addChild(opponent)
+        
+        opponentUpperBound = opponent.position.y + opponent.size.height
+        opponentLowerBound = opponent.position.y
     }
     
     func moveOpponent(){
         var changeDirection = false
-        opponent.position.x -= CGFloat(self.opponentSpeed)
+        opponent.position.x -= CGFloat(self.opponentxSpeed)
         
         // forces opponent to switch direction if it hits the edge
         if(opponent.position.x > self.rightBounds - opponent.size.width || opponent.position.x < self.leftBounds + opponent.size.width){
@@ -81,16 +87,33 @@ class GameScene: SKScene {
         }
         
         // 1 in 6 chance that opponent will switch direction
-        let randomChance = Int(arc4random_uniform(7))
+        var randomChance = Int(arc4random_uniform(7))
         if( randomChance == 1) {
             changeDirection = true
         }
         
         if(changeDirection == true){
-            self.opponentSpeed *= -1
+            self.opponentxSpeed *= -1
         }
         
-
+        changeDirection = false
+        opponent.position.y -= CGFloat(self.opponentySpeed)
+        
+        // forces opponent to switch direction if it hits the edge
+        if(opponent.position.y > self.opponentUpperBound ||
+            opponent.position.y < opponentLowerBound) {
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            self.opponentySpeed *= -1
+        }
     }
     
     func sendOpponentPunch(){
