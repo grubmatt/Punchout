@@ -22,19 +22,17 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        backgroundColor = SKColor.blackColor()
+        let backgroundColor = SKColor.blackColor()
+        
         background.position = CGPoint(
             x: frame.size.width / 2,
             y: frame.size.height / 2)
+        
         addChild(background)
-        
-        
         setupOpponent()
 
         setupPlayer()
         //setupPlayer()
-        
-    
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -148,5 +146,4 @@ class GameScene: SKScene {
         addChild(user.block_fist)
         addChild(user.punch_fist)
     }
-=
 }
