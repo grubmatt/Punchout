@@ -22,8 +22,8 @@ class GameScene: SKScene {
     
     var opponentUpperBound: CGFloat = 0
     var opponentLowerBound: CGFloat = 0
-    var userUpperBound = CGFloat(screenHeight / 2)
-    var userLowerBound = CGFloat(screenHeight / 4)
+    var userUpperBound: CGFloat = 0
+    var userLowerBound: CGFloat = 0
     
     var gameLength: NSTimeInterval = 31
     
@@ -59,8 +59,6 @@ class GameScene: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-
-
         
         moveOpponent()
         movePlayer()
@@ -105,7 +103,6 @@ class GameScene: SKScene {
         
         opponent.position.x = move.0
         opponent.position.y = move.1
-        
     }
     
     func opponentLogic(){
@@ -151,16 +148,6 @@ class GameScene: SKScene {
             x: frame.size.width/2 + user.punch_fist.size.width/2,
             y: frame.size.height/2 - user.punch_fist.size.height/2)
         
-        
-        
-//        opponent.position = CGPoint(x:frame.size.width / 2,
-//                                    y:frame.size.height / 1.6)
-//        addChild(opponent)
-//        
-//        opponentUpperBound = opponent.position.y + opponent.size.height
-//        opponentLowerBound = opponent.position.y
-        
-        
         addChild(user.block_fist)
         addChild(user.punch_fist)
         
@@ -169,14 +156,13 @@ class GameScene: SKScene {
     }
     
     func movePlayer() {
-        let leftBounds = size.width / 10
-        let rightBounds = size.width / 10 * CGFloat(9)
-        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
-        let lowerBounds = user.block_fist.position.y
+        let leftBounds = self.leftBounds + user.block_fist.size.width
+        let rightBounds = self.rightBounds - user.punch_fist.size.width
+        let upperBounds = self.userUpperBound
+        let lowerBounds = self.userLowerBound
         
-        user.moveFists(self,
-                       leftBound: leftBounds, rightBound: rightBounds,
-                       upBound: upperBounds, lowBound: lowerBounds)
+        let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds)
+        
         user.block_fist.position.x = move.0
         user.punch_fist.position.x = move.1
         user.block_fist.position.y = move.2
