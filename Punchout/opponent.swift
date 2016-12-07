@@ -90,8 +90,8 @@ class Opponent : SKSpriteNode {
         let newX = x - xSpeed
         
         // forces opponent to switch direction if it hits the edge
-        if(newX >= rightBounds
-            || newX <= leftBounds){
+        if(newX > rightBounds
+            || newX < leftBounds){
             changeDirection = true
         }
         
@@ -109,8 +109,8 @@ class Opponent : SKSpriteNode {
         
         let newY = y - ySpeed
         
-        if(newY >= upperBounds
-            || newY <= lowerBounds){
+        if(newY > upperBounds
+            || newY < lowerBounds){
             changeDirection = true
         }
         

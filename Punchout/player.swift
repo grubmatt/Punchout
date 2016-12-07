@@ -86,5 +86,39 @@ class player {
         if(changeDirection == true){
             ySpeed *= -1
         }
+        
+        // restore relative positions of the two fists
+        // so they stay close together
+        if (outOfPosition()) {
+            restorePositions()
+        }
+        
     }
+    
+    // Move fists back together after moveFists
+    private func restorePositions() {
+        let halfY = (block_fist.position.y + punch_fist.position.y) / 2
+        let halfX = (block_fist.position.x + punch_fist.position.x) / 2
+        let newBlockX = (halfX - block_fist.size.width/2)
+        let newPunchX = (halfX + punch_fist.size.width/2)
+        
+        block_fist.position.y = halfY
+        block_fist.position.x = newBlockX
+        
+        punch_fist.position.y = halfY
+        punch_fist.position.x = newPunchX
+    }
+    
+    private func outOfPosition() -> Bool {
+        let distance = abs(block_fist.position.x - punch_fist.position.x)
+        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
+        
+        let offX = abs(distance - combWidth)
+        let offY = abs(block_fist.position.y - punch_fist.position.y)
+        
+        return (offX >= 5 || offY >= 5)
+        
+    }
+    
+    
 }

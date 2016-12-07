@@ -29,17 +29,19 @@ class StartGameScene: SKScene {
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "shortgame" {
-            let gameOverScene = GameScene(size: size)
-            gameOverScene.scaleMode = scaleMode
+            let shortScene = GameScene(size: size)
+            shortScene.gameLength = 31
+            shortScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(gameOverScene,transition: transitionType)
+            view?.presentScene(shortScene,transition: transitionType)
         }
         
         if touchedNode.name == "longgame" {
-            let gameOverScene = GameScene(size: size)
-            gameOverScene.scaleMode = scaleMode
+            let longScene = GameScene(size: size)
+            longScene.gameLength = 61
+            longScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(gameOverScene,transition: transitionType)
+            view?.presentScene(longScene,transition: transitionType)
         }
     }
     

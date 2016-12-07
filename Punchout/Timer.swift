@@ -2,22 +2,35 @@
 //  Timer.swift
 //  Punchout
 //
-//  Created by Matt Gruber on 12/7/16.
+//  Adapted from http://tutorials.tinyappco.com/SwiftGames/Timer by Matt Gruber on 12/7/16.
 //  Copyright © 2016 CMU. All rights reserved.
 //
 
 import SpriteKit
 
 class Timer: SKLabelNode {
-    func update() {
     
+    var endTime:NSDate!
+    
+    func update() {
+        let timeLeftInt = Int(timeLeft())
+        self.text = String(timeLeftInt)
+    }
+    
+    func timeLeft() -> NSTimeInterval {
+        
+        let now = NSDate()
+        let remainingSeconds = endTime.timeIntervalSinceDate(now)
+        return max(remainingSeconds, 0)
+        
     }
     
     func startWithDuration(duration: NSTimeInterval) {
-    
+        let timeNow = NSDate()
+        endTime = timeNow.dateByAddingTimeInterval(duration)
     }
     
     func hasFinished() -> Bool {
-        return false
+        return timeLeft() == 0
     }
 }
