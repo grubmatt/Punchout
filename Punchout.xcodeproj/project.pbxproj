@@ -23,6 +23,7 @@
 		682215AF1DEFC22F00EE3186 /* OpponentPunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */; };
 		682215B11DEFCC5600EE3186 /* OpponentBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215B01DEFCC5600EE3186 /* OpponentBlock.swift */; };
 		682215B31DEFD12C00EE3186 /* CollisionCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215B21DEFD12C00EE3186 /* CollisionCategories.swift */; };
+		68F656C61DF7D80C00EE3595 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F656C51DF7D80C00EE3595 /* Timer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpponentPunch.swift; sourceTree = "<group>"; };
 		682215B01DEFCC5600EE3186 /* OpponentBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpponentBlock.swift; sourceTree = "<group>"; };
 		682215B21DEFD12C00EE3186 /* CollisionCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionCategories.swift; sourceTree = "<group>"; };
+		68F656C51DF7D80C00EE3595 /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				682215B01DEFCC5600EE3186 /* OpponentBlock.swift */,
 				01FD87671DF094AA00AEED0C /* player.swift */,
 				682215B21DEFD12C00EE3186 /* CollisionCategories.swift */,
+				68F656C51DF7D80C00EE3595 /* Timer.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				682215B11DEFCC5600EE3186 /* OpponentBlock.swift in Sources */,
 				015EA53B1DEFA83B00710A8D /* GameViewController.swift in Sources */,
 				682215AF1DEFC22F00EE3186 /* OpponentPunch.swift in Sources */,
+				68F656C61DF7D80C00EE3595 /* Timer.swift in Sources */,
 				015EA5331DEFA83B00710A8D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

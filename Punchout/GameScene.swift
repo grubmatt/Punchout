@@ -8,21 +8,26 @@
 
 import SpriteKit
 
+let screenWidth = UIScreen.mainScreen().bounds.width
+let screenHeight = UIScreen.mainScreen().bounds.height
 
 class GameScene: SKScene {
     
-    let user : player = player()
-    let opponent : Opponent = Opponent()
+    let user: player = player()
+    let opponent: Opponent = Opponent()
+    let timer: Timer = Timer()
     
     let leftBounds = CGFloat(0)
-    let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
+    let rightBounds = CGFloat(screenWidth)
     
-    var opponentUpperBound : CGFloat = 0
-    var opponentLowerBound : CGFloat = 0
+    var opponentUpperBound: CGFloat = 0
+    var opponentLowerBound: CGFloat = 0
+    var userUpperBound: CGFloat = 0
+    var userLowerBound: CGFloat = 0
+    
+    var gameLength: NSTimeInterval = 31
+    
     var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
-    
-    var userUpperBound = CGFloat(UIScreen.mainScreen().bounds.height / 2)
-    var userLowerBound = CGFloat(UIScreen.mainScreen().bounds.height / 4)
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -34,8 +39,7 @@ class GameScene: SKScene {
         addChild(background)
         setupOpponent()
         setupPlayer()
-        
-//        setupPlayer()
+        setupTimer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -50,27 +54,7 @@ class GameScene: SKScene {
             user.punch_fist.punch(self)
         } else if (touchedNode.name == "block") {
             user.block_fist.block(self)
-        } else {
-            
         }
-
-        //        for touch in touches {
-        //            let location = touch.locationInNode(self)
-        //
-        //            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-        //
-        //            sprite.xScale = 0.5
-        //            sprite.yScale = 0.5
-        //            sprite.position = location
-        //
-        //            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-        //
-        //            sprite.runAction(SKAction.repeatActionForever(action))
-        //
-        //            self.addChild(sprite)
-        //        }
-        //sendOpponentPunch()
-        //sendOpponentBlock()
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -78,9 +62,16 @@ class GameScene: SKScene {
         
         moveOpponent()
         movePlayer()
-        
+
         opponentLogic()
+        timer.update()
         
+        if (timer.hasFinished()) {
+            let gameOverScene = StartGameScene(size: size)
+            gameOverScene.scaleMode = scaleMode
+            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            view?.presentScene(gameOverScene,transition: transitionType)
+        }
     }
     
     // MARK: - Opponent Methods
@@ -95,18 +86,23 @@ class GameScene: SKScene {
     
     func moveOpponent(){
         
-        let leftBounds = self.leftBounds - opponent.size.width
-        let rightBounds = self.rightBounds + opponent.size.width
+        let leftBounds = self.leftBounds + opponent.size.width
+        let rightBounds = self.rightBounds - opponent.size.width
         let upperBounds = self.opponentUpperBound
         let lowerBounds = self.opponentLowerBound
         
         var move: (CGFloat, CGFloat)
         
-        move = opponent.move(self, upperBounds: upperBounds, lowerBounds: lowerBounds, leftBounds: leftBounds, rightBounds: rightBounds, x: opponent.position.x, y: opponent.position.y)
+        move = opponent.move(self,
+        upperBounds: upperBounds,
+        lowerBounds: lowerBounds,
+        leftBounds: leftBounds,
+        rightBounds: rightBounds,
+        x: opponent.position.x,
+        y: opponent.position.y)
         
         opponent.position.x = move.0
         opponent.position.y = move.1
-        
     }
     
     func opponentLogic(){
@@ -143,28 +139,49 @@ class GameScene: SKScene {
     
     
     // MARK: - Player Methods
-    func setupPlayer(){
+    func setupPlayer() {
         user.block_fist.position = CGPoint(
-            x: size.width/2 - user.block_fist.size.width/2,
-            y: size.height/2 - user.block_fist.size.height/2)
+            x: frame.size.width/2 - user.block_fist.size.width/2,
+            y: frame.size.height/2 - user.block_fist.size.height/2)
         
         user.punch_fist.position = CGPoint(
-            x: size.width/2 + user.punch_fist.size.width/2,
-            y: size.height/2 - user.punch_fist.size.height/2)
+            x: frame.size.width/2 + user.punch_fist.size.width/2,
+            y: frame.size.height/2 - user.punch_fist.size.height/2)
         
         addChild(user.block_fist)
         addChild(user.punch_fist)
+        
+        userUpperBound = user.block_fist.position.y
+        userLowerBound = user.block_fist.position.y - user.block_fist.size.height
     }
     
-    func movePlayer(){
-        let leftBounds = size.width / 10
-        let rightBounds = size.width / 10 * CGFloat(9)
-        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
-        let lowerBounds = user.block_fist.position.y
+    func movePlayer() {
+        let leftBounds = self.leftBounds + user.block_fist.size.width
+        let rightBounds = self.rightBounds - user.punch_fist.size.width
+        let upperBounds = self.userUpperBound
+        let lowerBounds = self.userLowerBound
         
-        user.moveFists(self,
-                       leftBound: leftBounds, rightBound: rightBounds,
-                       upBound: upperBounds, lowBound: lowerBounds)
+        let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds)
+        
+        user.block_fist.position.x = move.0
+        user.punch_fist.position.x = move.1
+        user.block_fist.position.y = move.2
+        user.punch_fist.position.y = move.2
+        
+        if (user.outOfPosition()) {
+            user.restorePositions()
+        }
+    }
+    
+    // MARK: - Timer Methods
+    
+    func setupTimer() {
+        let top = CGPointMake(screenWidth/2, screenHeight-screenHeight/10)
+        
+        timer.position = top
+        timer.fontSize = 50
+        addChild(timer)
+        timer.startWithDuration(gameLength)
     }
 
 }

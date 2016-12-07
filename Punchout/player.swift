@@ -14,8 +14,8 @@ class player {
     let punch_fist : fist
     var score : Int
     
-    var xSpeed = CGFloat(3)
-    var ySpeed = CGFloat(3)
+    var xSpeed : CGFloat = 3
+    var ySpeed : CGFloat = 3
     
     
     init() {
@@ -26,6 +26,9 @@ class player {
         punch_fist.name = "punch"
         
         score = 0
+        
+//        xSpeed = CGFloat(block_fist.size.width / 10)
+//        ySpeed = CGFloat(block_fist.size.height / 10)
     }
     
     func punch(scene : SKScene) {
@@ -46,14 +49,16 @@ class player {
     
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
-                   upBound : CGFloat, lowBound : CGFloat) {
-        var changeDirection = false
-        block_fist.position.x -= xSpeed
-        punch_fist.position.x -= xSpeed
+                   upBound : CGFloat, lowBound : CGFloat) ->
+                    (CGFloat, CGFloat, CGFloat) {
         
-        // forces user to switch direction if it hits the edge
-        if(punch_fist.position.x >= rightBound - block_fist.size.width
-        || block_fist.position.x <= leftBound  + block_fist.size.width){
+        var changeDirection = false
+        let newPX = punch_fist.position.x - xSpeed
+        let newBX = block_fist.position.x - xSpeed
+        
+        // forces opponent to switch direction if it hits the edge
+        if(newPX > rightBound
+        || newBX < leftBound){
             changeDirection = true
         }
         
@@ -69,11 +74,10 @@ class player {
         
         changeDirection = false
         
-        block_fist.position.y -= ySpeed
-        punch_fist.position.y -= ySpeed
-        
-        if(punch_fist.position.y >= upBound - block_fist.size.height
-        || block_fist.position.y <= lowBound + block_fist.size.height){
+        let newY = block_fist.position.y - ySpeed
+                        
+        if(newY > upBound
+        || newY < lowBound){
             changeDirection = true
         }
         
@@ -86,5 +90,40 @@ class player {
         if(changeDirection == true){
             ySpeed *= -1
         }
+        
+        // restore relative positions of the two fists
+        // so they stay close together
+        if (outOfPosition()) {
+            restorePositions()
+        }
+        
+        return (newBX, newPX, newY)
     }
+    
+    // Move fists back together after moveFists
+    func restorePositions() {
+        let halfY = (block_fist.position.y + punch_fist.position.y) / 2
+        let halfX = (block_fist.position.x + punch_fist.position.x) / 2
+        let newBlockX = (halfX - block_fist.size.width/2)
+        let newPunchX = (halfX + punch_fist.size.width/2)
+            
+        block_fist.position.y = halfY
+        block_fist.position.x = newBlockX
+            
+        punch_fist.position.y = halfY
+        punch_fist.position.x = newPunchX
+    }
+    
+    func outOfPosition() -> Bool {
+        let distance = abs(block_fist.position.x - punch_fist.position.x)
+        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
+        
+        let offX = abs(distance - combWidth)
+        let offY = abs(block_fist.position.y - punch_fist.position.y)
+        
+        return (offX >= 5 || offY >= 5)
+        
+    }
+    
+    
 }
