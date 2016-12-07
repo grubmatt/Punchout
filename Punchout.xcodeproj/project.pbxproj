@@ -162,11 +162,8 @@
 				015EA5671DEFB24900710A8D /* fist.swift */,
 				682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */,
 				682215B01DEFCC5600EE3186 /* OpponentBlock.swift */,
-<<<<<<< HEAD
 				01FD87671DF094AA00AEED0C /* player.swift */,
-=======
 				682215B21DEFD12C00EE3186 /* CollisionCategories.swift */,
->>>>>>> 0dfdeed436d15152fba371f338ef40155953bf0f
 			);
 			name = Models;
 			sourceTree = "<group>";

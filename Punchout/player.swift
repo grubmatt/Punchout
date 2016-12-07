@@ -14,7 +14,8 @@ class player {
     let punch_fist : fist
     var score : Int
     
-    let movementArray = [-1, 1]
+    var xSpeed = CGFloat(3)
+    var ySpeed = CGFloat(3)
     
     
     init() {
@@ -45,24 +46,45 @@ class player {
     
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
-                    upBound : CGFloat, lowBound : CGFloat) {
-        // move both pair of fists randomly to left or right
-        let randomIndex = Int(arc4random_uniform(UInt32(movementArray.count)))
-//        let randomHMove = movementArray[randomIndex]
-        let left = block_fist.position.x - block_fist.size.width / 2
-        let right = punch_fist.position.x + punch_fist.size.width / 2
-        let upper = block_fist.position.y + block_fist.size.height / 2
-        let lower = block_fist.position.y - block_fist.size.height / 2
+                   upBound : CGFloat, lowBound : CGFloat) {
+        var changeDirection = false
+        block_fist.position.x -= xSpeed
+        punch_fist.position.x -= xSpeed
         
-        var randomHorizontalMove = (left <= leftBound) ? 1 :
-            ((right >= rightBound) ? -1 : movementArray[randomIndex])
-        var randomVerticalMove = (upper >= upBound) ? -1 :
-            ((lower <= lowBound) ? 1 : movementArray[randomIndex])
+        // forces user to switch direction if it hits the edge
+        if(punch_fist.position.x >= rightBound - block_fist.size.width
+        || block_fist.position.x <= leftBound  + block_fist.size.width){
+            changeDirection = true
+        }
         
-        let moveX = CGFloat(randomHorizontalMove) * block_fist.size.width / 2
-        let moveY = CGFloat(randomVerticalMove) * block_fist.size.height / 2
+        // 1 in 6 chance that opponent will switch direction
+        var randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
         
-        block_fist.move(scene, dx: moveX, dy: moveY)
-        punch_fist.move(scene, dx: moveX, dy: moveY)
+        if(changeDirection == true){
+            xSpeed *= -1
+        }
+        
+        changeDirection = false
+        
+        block_fist.position.y -= ySpeed
+        punch_fist.position.y -= ySpeed
+        
+        if(punch_fist.position.y >= upBound - block_fist.size.height
+        || block_fist.position.y <= lowBound + block_fist.size.height){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            ySpeed *= -1
+        }
     }
 }

@@ -35,8 +35,8 @@ class GameScene: SKScene {
         
         addChild(background)
         setupOpponent()
-
         setupPlayer()
+        
 //        setupPlayer()
     }
     
@@ -80,11 +80,13 @@ class GameScene: SKScene {
 
         let leftBounds = size.width / 10
         let rightBounds = size.width / 10 * CGFloat(9)
-        let upperBounds = size.height / 2
-        let lowerBounds = CGFloat(0)
+        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
+        let lowerBounds = user.block_fist.position.y
         
         moveOpponent()
-        movePlayer()
+        user.moveFists(self,
+                       leftBound: leftBounds, rightBound: rightBounds,
+                       upBound: upperBounds, lowBound: lowerBounds)
     }
     
     // MARK: - Opponent Methods
