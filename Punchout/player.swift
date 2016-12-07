@@ -14,8 +14,8 @@ class player {
     let punch_fist : fist
     var score : Int
     
-    var xSpeed = CGFloat(3)
-    var ySpeed = CGFloat(3)
+    var xSpeed : CGFloat = 3
+    var ySpeed : CGFloat = 3
     
     
     init() {
@@ -26,6 +26,9 @@ class player {
         punch_fist.name = "punch"
         
         score = 0
+        
+//        xSpeed = CGFloat(block_fist.size.width / 10)
+//        ySpeed = CGFloat(block_fist.size.height / 10)
     }
     
     func punch(scene : SKScene) {
@@ -46,14 +49,16 @@ class player {
     
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
-                   upBound : CGFloat, lowBound : CGFloat) {
-        var changeDirection = false
-        block_fist.position.x -= xSpeed
-        punch_fist.position.x -= xSpeed
+                   upBound : CGFloat, lowBound : CGFloat) ->
+                    (CGFloat, CGFloat, CGFloat) {
         
-        // forces user to switch direction if it hits the edge
-        if(punch_fist.position.x >= rightBound - block_fist.size.width
-        || block_fist.position.x <= leftBound  + block_fist.size.width){
+        var changeDirection = false
+        let newPX = punch_fist.position.x - xSpeed
+        let newBX = block_fist.position.x - xSpeed
+        
+        // forces opponent to switch direction if it hits the edge
+        if(newPX > rightBound
+        || newBX < leftBound){
             changeDirection = true
         }
         
@@ -69,11 +74,10 @@ class player {
         
         changeDirection = false
         
-        block_fist.position.y -= ySpeed
-        punch_fist.position.y -= ySpeed
-        
-        if(punch_fist.position.y >= upBound - block_fist.size.height
-        || block_fist.position.y <= lowBound + block_fist.size.height){
+        let newY = block_fist.position.y - ySpeed
+                        
+        if(newY > upBound
+        || newY < lowBound){
             changeDirection = true
         }
         

@@ -59,6 +59,8 @@ class GameScene: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+
+
         
         moveOpponent()
         movePlayer()
@@ -93,7 +95,13 @@ class GameScene: SKScene {
         
         var move: (CGFloat, CGFloat)
         
-        move = opponent.move(self, upperBounds: upperBounds, lowerBounds: lowerBounds, leftBounds: leftBounds, rightBounds: rightBounds, x: opponent.position.x, y: opponent.position.y)
+        move = opponent.move(self,
+        upperBounds: upperBounds,
+        lowerBounds: lowerBounds,
+        leftBounds: leftBounds,
+        rightBounds: rightBounds,
+        x: opponent.position.x,
+        y: opponent.position.y)
         
         opponent.position.x = move.0
         opponent.position.y = move.1
@@ -136,15 +144,28 @@ class GameScene: SKScene {
     // MARK: - Player Methods
     func setupPlayer() {
         user.block_fist.position = CGPoint(
-            x: size.width/2 - user.block_fist.size.width/2,
-            y: size.height/2 - user.block_fist.size.height/2)
+            x: frame.size.width/2 - user.block_fist.size.width/2,
+            y: frame.size.height/2 - user.block_fist.size.height/2)
         
         user.punch_fist.position = CGPoint(
-            x: size.width/2 + user.punch_fist.size.width/2,
-            y: size.height/2 - user.punch_fist.size.height/2)
+            x: frame.size.width/2 + user.punch_fist.size.width/2,
+            y: frame.size.height/2 - user.punch_fist.size.height/2)
+        
+        
+        
+//        opponent.position = CGPoint(x:frame.size.width / 2,
+//                                    y:frame.size.height / 1.6)
+//        addChild(opponent)
+//        
+//        opponentUpperBound = opponent.position.y + opponent.size.height
+//        opponentLowerBound = opponent.position.y
+        
         
         addChild(user.block_fist)
         addChild(user.punch_fist)
+        
+        userUpperBound = user.block_fist.position.y
+        userLowerBound = user.block_fist.position.y - user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -156,6 +177,14 @@ class GameScene: SKScene {
         user.moveFists(self,
                        leftBound: leftBounds, rightBound: rightBounds,
                        upBound: upperBounds, lowBound: lowerBounds)
+        user.block_fist.position.x = move.0
+        user.punch_fist.position.x = move.1
+        user.block_fist.position.y = move.2
+        user.punch_fist.position.y = move.2
+        
+        if (user.outOfPosition()) {
+            user.restorePositions()
+        }
     }
     
     // MARK: - Timer Methods
