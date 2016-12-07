@@ -78,10 +78,10 @@ class GameScene: SKScene {
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
 
-        let leftBounds = size.width / 10
-        let rightBounds = size.width / 10 * CGFloat(9)
-        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
-        let lowerBounds = user.block_fist.position.y
+        let leftBounds = background.position.x - background.size.width / 2
+        let rightBounds = background.position.x + background.size.width / 2
+        let upperBounds = background.anchorPoint.y
+        let lowerBounds = background.anchorPoint.y - background.size.height / 2
         
         moveOpponent()
         user.moveFists(self,
