@@ -11,7 +11,8 @@ import SpriteKit
 
 class fist: SKSpriteNode {
     
-    var canMove:Bool
+    var canMove: Bool
+    var lastPunch = 0
     
     init(fisttype : String) {
         let texture : SKTexture?
@@ -29,6 +30,14 @@ class fist: SKSpriteNode {
         
         
         // preparing player for collisions once we add physics...
+        if (fisttype != "left") {
+            self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+            self.physicsBody?.dynamic = true
+            self.physicsBody?.usesPreciseCollisionDetection = true
+            self.physicsBody?.categoryBitMask = CollisionCategories.Punch
+            self.physicsBody?.contactTestBitMask = CollisionCategories.Opponent
+            self.physicsBody?.collisionBitMask = 0x0
+        }
         
     }
     
@@ -39,7 +48,7 @@ class fist: SKSpriteNode {
     // move fist left and up
     func punch(scene: SKScene) {
         let moveX = -self.size.width / 2
-        let moveY = self.size.height
+        let moveY = self.size.height * 2
         actionHelper(scene, dx: moveX, dy: moveY)
     }
     

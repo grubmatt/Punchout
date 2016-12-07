@@ -11,7 +11,7 @@ import SpriteKit
 
 class Opponent : SKSpriteNode {
     
-    var points = 0
+    var score = 0
     var xSpeed: CGFloat = 3
     var ySpeed: CGFloat = 3
     var lastPunch: CGFloat = 0
@@ -23,6 +23,14 @@ class Opponent : SKSpriteNode {
         self.setScale(1.5)
         
         // preparing opponent for collisions once we add physics...
+        self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+        self.physicsBody?.dynamic
+        self.physicsBody?.usesPreciseCollisionDetection = true
+        self.physicsBody?.categoryBitMask = CollisionCategories.Opponent
+        self.physicsBody?.contactTestBitMask = CollisionCategories.Punch
+        self.physicsBody?.collisionBitMask = 0x0
+
+        
         
         animate()
     }
@@ -55,10 +63,9 @@ class Opponent : SKSpriteNode {
     
     func sendBlock(scene: SKScene){
         var opponentTextures:[SKTexture] = []
-        opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
         opponentTextures.append(SKTexture(imageNamed: "opponent_block"))
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
-        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15)
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.2)
         self.runAction(opponentAnimation)
         
     }
@@ -77,8 +84,8 @@ class Opponent : SKSpriteNode {
     }
     
     func shouldBlock() -> Bool {
-        // 1 in 10 chance that opponent will send a punch
-        if (Int(arc4random_uniform(11)) == 1) {
+        // 1 in 3 chance that opponent will send a block
+        if (Int(arc4random_uniform(3)) == 1) {
             return true
         } else {
             return false
