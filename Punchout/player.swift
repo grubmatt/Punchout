@@ -135,8 +135,8 @@ class player: SKNode {
     func restorePositions() {
         let halfY = (block_fist.position.y + punch_fist.position.y) / 2
         let halfX = (block_fist.position.x + punch_fist.position.x) / 2
-        let newBlockX = (halfX - block_fist.size.width/2)
-        let newPunchX = (halfX + punch_fist.size.width/2)
+        let newBlockX = (halfX - block_fist.size.width)
+        let newPunchX = (halfX + punch_fist.size.width)
             
         block_fist.position.y = halfY
         block_fist.position.x = newBlockX - 10
@@ -146,13 +146,16 @@ class player: SKNode {
     }
     
     func outOfPosition() -> Bool {
-        let distance = abs(block_fist.position.x - punch_fist.position.x)
+        let distance = block_fist.position.x - punch_fist.position.x
         let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
         
-        let offX = abs(distance - combWidth)
+        let offset = CGFloat(10)
+        
         let offY = abs(block_fist.position.y - punch_fist.position.y)
         
-        return (offX >= 15 || offY >= 15)
+        return ((distance <= 0)
+            || (distance >= combWidth + offset)
+            || offY > offset)
         
     }
     

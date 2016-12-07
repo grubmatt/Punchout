@@ -58,9 +58,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.nodeAtPoint(touchLocation)
         
         if (touchedNode.name == "punch") {
+            // suspend block physics body?
+//            user.block_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+            user.block_fist.physicsBody?.dynamic = false
             user.punch_fist.punch(self)
+            user.block_fist.physicsBody?.dynamic = true
         } else if (touchedNode.name == "block") {
+//            user.punch_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+            user.punch_fist.physicsBody?.dynamic = false
             user.block_fist.block(self)
+            user.punch_fist.physicsBody?.dynamic = true
+            
+        }
+//        user.restorePositions()
+        if (user.outOfPosition()) {
+            user.restorePositions()
         }
     }
     
@@ -305,8 +317,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didSimulatePhysics() {
-//        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
-//        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+//        user.restorePositions()
         
 //        user.setFistBodyPhysics(accelerationX * 600, dy : accelerationY * 600)
         

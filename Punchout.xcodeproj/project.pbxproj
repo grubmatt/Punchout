@@ -25,6 +25,7 @@
 		682215B31DEFD12C00EE3186 /* CollisionCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215B21DEFD12C00EE3186 /* CollisionCategories.swift */; };
 		68F656C61DF7D80C00EE3595 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F656C51DF7D80C00EE3595 /* Timer.swift */; };
 		68F656CA1DF8A54A00EE3595 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F656C91DF8A54A00EE3595 /* GameOverScene.swift */; };
+		68F656CC1DF8B98700EE3595 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F656CB1DF8B98700EE3595 /* TutorialScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		682215B21DEFD12C00EE3186 /* CollisionCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionCategories.swift; sourceTree = "<group>"; };
 		68F656C51DF7D80C00EE3595 /* Timer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		68F656C91DF8A54A00EE3595 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		68F656CB1DF8B98700EE3595 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				015EA5381DEFA83B00710A8D /* GameScene.swift */,
+				68F656CB1DF8B98700EE3595 /* TutorialScene.swift */,
 				015EA5691DEFB30200710A8D /* StartGameScene.swift */,
 				68F656C91DF8A54A00EE3595 /* GameOverScene.swift */,
 			);
@@ -242,7 +245,8 @@
 				TargetAttributes = {
 					015EA52E1DEFA83B00710A8D = {
 						CreatedOnToolsVersion = 8.0;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = FNN9U4KF98;
+						ProvisioningStyle = Automatic;
 					};
 					015EA5481DEFA83B00710A8D = {
 						CreatedOnToolsVersion = 8.0;
@@ -318,6 +322,7 @@
 				682215B11DEFCC5600EE3186 /* OpponentBlock.swift in Sources */,
 				015EA53B1DEFA83B00710A8D /* GameViewController.swift in Sources */,
 				682215AF1DEFC22F00EE3186 /* OpponentPunch.swift in Sources */,
+				68F656CC1DF8B98700EE3595 /* TutorialScene.swift in Sources */,
 				68F656C61DF7D80C00EE3595 /* Timer.swift in Sources */,
 				68F656CA1DF8A54A00EE3595 /* GameOverScene.swift in Sources */,
 				015EA5331DEFA83B00710A8D /* AppDelegate.swift in Sources */,
@@ -474,7 +479,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FNN9U4KF98;
 				INFOPLIST_FILE = Punchout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -490,7 +495,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = FNN9U4KF98;
 				INFOPLIST_FILE = Punchout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
