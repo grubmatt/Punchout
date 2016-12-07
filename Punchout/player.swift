@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class player : NSNotificationCenter {
+class player : SKNode {
     let block_fist : fist
     let punch_fist : fist
     var score : Int
@@ -26,6 +26,11 @@ class player : NSNotificationCenter {
         punch_fist.name = "punch"
         
         score = 0
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func punch(scene : SKScene) {
