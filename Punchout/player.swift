@@ -9,29 +9,53 @@
 import UIKit
 import SpriteKit
 
-class player : SKNode {
+class player: SKNode {
     let block_fist : fist
     let punch_fist : fist
-    var score : Int
+    var score : Int = 0
+    var anchor : SKPhysicsJointPin?
     
     var xSpeed : CGFloat = 3
     var ySpeed : CGFloat = 3
     
-    
+    /*left_pos : CGPoint, right_pos : CGPoint*/
     override init() {
+        
         block_fist = fist(fisttype: "left")
         block_fist.name = "block"
+//        block_fist.position = left_pos
         
         punch_fist = fist(fisttype: "right")
         punch_fist.name = "punch"
+//        punch_fist.position = right_pos
         
         score = 0
+        
         super.init()
+        
+//        let midPoint = getMiddlePoint(left_pos, p2: right_pos)
+        
+//        anchor = SKPhysicsJointPin.jointWithBodyA(
+//            block_fist.physicsBody!,
+//            bodyB: punch_fist.physicsBody!,
+//            anchor: midPoint)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private func getMiddlePoint(p1 : CGPoint, p2: CGPoint) -> CGPoint {
+        let lx = p1.x
+        let rx = p2.x
+        
+        let ly = p1.y
+        let ry = p1.y
+        
+        return CGPoint(x: (lx+rx)/2 , y: (ly+ry)/2)
+    }
+    
+    
     
     func punch(scene : SKScene) {
         block_fist.canMove = false
@@ -49,14 +73,19 @@ class player : SKNode {
         // add collision physics and update score: successful block  +2
     }
     
+    func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
+        punch_fist.physicsBody?.velocity = CGVector(dx: dx, dy: dy)
+        block_fist.physicsBody?.velocity = CGVector(dx: dx, dy: dy)
+    }
+    
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
-                   upBound : CGFloat, lowBound : CGFloat) ->
+                   upBound : CGFloat, lowBound : CGFloat, bx: CGFloat, px: CGFloat, y: CGFloat) ->
                     (CGFloat, CGFloat, CGFloat) {
         
         var changeDirection = false
-        let newPX = punch_fist.position.x - xSpeed
-        let newBX = block_fist.position.x - xSpeed
+        let newPX = px - xSpeed
+        let newBX = bx - xSpeed
         
         // forces opponent to switch direction if it hits the edge
         if(newPX > rightBound
@@ -76,10 +105,10 @@ class player : SKNode {
         
         changeDirection = false
         
-        let newY = block_fist.position.y - ySpeed
+        let newY = y - ySpeed
                         
-        if(newY > upBound
-        || newY < lowBound){
+        if(newY < upBound
+        || newY > lowBound){
             changeDirection = true
         }
         

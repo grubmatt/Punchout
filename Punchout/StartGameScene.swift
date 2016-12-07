@@ -13,14 +13,27 @@ class StartGameScene: SKScene {
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
         
-        let shortGameButton = SKSpriteNode(imageNamed: "30seconds-start")
-        shortGameButton.position = CGPointMake(size.width/2,size.height/2 - 100)
+        let titleLabel = SKLabelNode()
+        titleLabel.position = CGPointMake(size.width/2, size.height - size.height/6)
+        titleLabel.text = "Punch Out"
+        titleLabel.fontSize = 65
+        addChild(titleLabel)
+        
+        let arena = SKSpriteNode(imageNamed: "boxing_ring_412x512")
+        arena.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 1.8)
+        arena.setScale(0.5)
+        addChild(arena)
+        
+        let shortGameButton = SKLabelNode()
+        shortGameButton.position = CGPointMake(size.width/2,size.height/4)
         shortGameButton.name = "shortgame"
+        shortGameButton.text = "30 sec - Fight"
         addChild(shortGameButton)
         
-        let longGameButton = SKSpriteNode(imageNamed: "60seconds-start")
-        longGameButton.position = CGPointMake(size.width/2,size.height/2 - 200)
+        let longGameButton = SKLabelNode()
+        longGameButton.position = CGPointMake(size.width/2,size.height/8)
         longGameButton.name = "longgame"
+        longGameButton.text = "5 sec - Fight"
         addChild(longGameButton)
     }
     
@@ -38,7 +51,7 @@ class StartGameScene: SKScene {
         
         if touchedNode.name == "longgame" {
             let longScene = GameScene(size: size)
-            longScene.gameLength = 61
+            longScene.gameLength = 6
             longScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(longScene,transition: transitionType)

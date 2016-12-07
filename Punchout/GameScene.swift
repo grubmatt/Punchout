@@ -20,7 +20,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     let userScore: SKLabelNode = SKLabelNode()
     let opponentScore: SKLabelNode = SKLabelNode()
-
+    let background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
+    
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(screenWidth)
     
@@ -38,17 +39,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var gameLength: NSTimeInterval = 31
     
-    var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
-    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
-        background.position = CGPoint(
-            x: frame.size.width / 2,
-            y: frame.size.height / 2)
-        
-        addChild(background)
-        
+        setupBackground()
         setupOpponent()
         setupPlayer()
         setupTimer()
@@ -74,25 +68,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
         
         moveOpponent()
-//        movePlayer()
-
         sendOpponentPunch()
         updateLabels()
-//        manualMovePlayer()
         
         // Transitions to home screen
         if (timer.hasFinished()) {
-            let gameOverScene = StartGameScene(size: size)
-            gameOverScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(gameOverScene,transition: transitionType)
+            transitionToGameOver()
         }
     }
     
     // MARK: - Opponent Methods
     func setupOpponent(){
-        opponent.position = CGPoint(x:frame.size.width / 2,
-                                    y:frame.size.height / 1.6)
+        opponent.position = CGPoint(x:screenWidth / 2,
+                                    y:screenHeight / 1.6)
         addChild(opponent)
         
         opponentUpperBound = opponent.position.y + opponent.size.height
@@ -161,18 +149,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(user.block_fist)
         addChild(user.punch_fist)
         
-        userUpperBound = user.block_fist.position.y
-        userLowerBound = user.block_fist.position.y - user.block_fist.size.height
+        
+        userUpperBound = screenHeight / 1.6
+        userLowerBound = screenHeight / 1.6 + 3 * user.block_fist.size.height
     }
     
     func movePlayer() {
         let leftBounds = self.leftBounds + user.block_fist.size.width
         let rightBounds = self.rightBounds - user.punch_fist.size.width
-        let upperBounds = opponent.position.y - opponent.size.height
-        let lowerBounds = self.userLowerBound
-        
-        let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds)
-        
+        let upperBounds = userUpperBound
+        let lowerBounds = userLowerBound
+    
+        let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
+                
         user.block_fist.position.x = move.0
         user.punch_fist.position.x = move.1
         user.block_fist.position.y = move.2
@@ -206,6 +195,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         addChild(userScore)
         addChild(opponentScore)
+        addChild(background)
+
     }
     
     func setupPhysics() {
@@ -219,6 +210,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timer.update()
         userScore.text = String(user.score)
         opponentScore.text = String(opponent.score)
+    }
+    
+    func transitionToGameOver() {
+        var userWin = true
+        if (user.score <= opponent.score) {
+            userWin = false
+        }
+        
+        let gameOverScene = GameOverScene(size: size)
+        gameOverScene.scaleMode = scaleMode
+        gameOverScene.userWin = userWin
+        gameOverScene.userScore = user.score
+        gameOverScene.opponentScore = opponent.score
+        let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+        view?.presentScene(gameOverScene,transition: transitionType)
     }
     
     // MARK: - Implementing SKPhysicsContactDelegate protocol
@@ -255,16 +261,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Accelerometer Methods
     func setupAccelerometer(){
-//        if motionManager.accelerometerAvailable {
-//            motionManager.accelerometerUpdateInterval = 0.2
-//            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {
-//                [weak self] (data: CMAccelerometerData?, error: NSError?) in
-//                if let acceleration = data?.acceleration {
-//                    self!.accelerationX = CGFloat(acceleration.x)
-//                }
-//                })
-//        }
-        
         if motionManager.accelerometerAvailable == true {
             // 2
             motionManager.accelerometerUpdateInterval = 0.1
@@ -273,17 +269,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
                     self!.accelerationY = CGFloat(acceleration.y)
-//                    let leftX = self!.user.block_fist.position.x - self!.user.block_fist.size.width / 2
-//                    let rightX = self!.user.punch_fist.position.x + self!.user.punch_fist.size.width / 2
-//                    let bothY = self!.user.block_fist.position.y
-//                    
-//                    let newLX = leftX + CGFloat(acceleration.x * 600)
-//                    let newRX = rightX + CGFloat(acceleration.x * 600)
-//                    let newY = bothY + CGFloat(acceleration.y * 600)
-//                    
-//                    self!.LdstX = newLX
-//                    self!.RdstX = newRX
-//                    self!.dstY = newY
                 }
             })
         }
@@ -320,14 +305,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didSimulatePhysics() {
-        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+//        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+//        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
+        
+//        user.setFistBodyPhysics(accelerationX * 600, dy : accelerationY * 600)
         
 //        let userUpBounds = opponent.position.y - opponent.size.height / 2
 //        let userLowBounds = userLowerBound
         
         
         
-        user.restorePositions()
+//        user.restorePositions()
         
     }
 }

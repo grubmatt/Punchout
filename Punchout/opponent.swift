@@ -74,7 +74,7 @@ class Opponent : SKSpriteNode {
         // Sliding chance that opponent will send a punch
         // The more time = more likely to punch
         let slide = UInt32(11 - Int(lastPunch)/6)
-        if(lastPunch > 15) {
+        if(lastPunch > 17) {
             if (Int(arc4random_uniform(slide)) == 1) {
                 return true
             }

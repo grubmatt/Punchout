@@ -30,6 +30,7 @@ class fist: SKSpriteNode {
         
         
         // preparing player for collisions once we add physics...
+        
         if (fisttype != "left") {
             self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
             self.physicsBody?.dynamic = true
@@ -37,6 +38,8 @@ class fist: SKSpriteNode {
             self.physicsBody?.categoryBitMask = CollisionCategories.Punch
             self.physicsBody?.contactTestBitMask = CollisionCategories.Opponent
             self.physicsBody?.collisionBitMask = 0x0
+        } else {
+            
         }
         
     }
