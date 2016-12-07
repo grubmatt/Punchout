@@ -31,10 +31,16 @@ class StartGameScene: SKScene {
         addChild(shortGameButton)
         
         let longGameButton = SKLabelNode()
-        longGameButton.position = CGPointMake(size.width/2,size.height/8)
+        longGameButton.position = CGPointMake(size.width/2,size.height/6)
         longGameButton.name = "longgame"
         longGameButton.text = "5 sec - Fight"
         addChild(longGameButton)
+        
+        let tutorialButton = SKLabelNode()
+        tutorialButton.position = CGPointMake(size.width/2,size.height/10)
+        tutorialButton.name = "tutorial"
+        tutorialButton.text = "Tutorial"
+        addChild(tutorialButton)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -55,6 +61,13 @@ class StartGameScene: SKScene {
             longScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(longScene,transition: transitionType)
+        }
+        
+        if touchedNode.name == "tutorial" {
+            let tutorialScene = TutorialScene(size: size)
+            tutorialScene.scaleMode = scaleMode
+            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            view?.presentScene(tutorialScene,transition: transitionType)
         }
     }
     
