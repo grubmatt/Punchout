@@ -30,14 +30,8 @@ class StartGameScene: SKScene {
         shortGameButton.text = "30 sec - Fight"
         addChild(shortGameButton)
         
-        let longGameButton = SKLabelNode()
-        longGameButton.position = CGPointMake(size.width/2,size.height/6)
-        longGameButton.name = "longgame"
-        longGameButton.text = "5 sec - Fight"
-        addChild(longGameButton)
-        
         let tutorialButton = SKLabelNode()
-        tutorialButton.position = CGPointMake(size.width/2,size.height/10)
+        tutorialButton.position = CGPointMake(size.width/2,size.height/9)
         tutorialButton.name = "tutorial"
         tutorialButton.text = "Tutorial"
         addChild(tutorialButton)

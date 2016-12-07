@@ -24,7 +24,7 @@ class Opponent : SKSpriteNode {
         
         // preparing opponent for collisions once we add physics...
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
-        self.physicsBody?.dynamic
+        self.physicsBody?.dynamic = true
         self.physicsBody?.usesPreciseCollisionDetection = true
         self.physicsBody?.categoryBitMask = CollisionCategories.Opponent
         self.physicsBody?.contactTestBitMask = CollisionCategories.Punch
@@ -52,11 +52,11 @@ class Opponent : SKSpriteNode {
     
     func sendPunch(scene: SKScene){
         var opponentTextures:[SKTexture] = []
-        for i in 1...3 {
+        for i in 2...3 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
         }
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
-        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15)
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.2)
         self.runAction(opponentAnimation)
         
     }
