@@ -9,38 +9,53 @@
 import SpriteKit
 
 
-//let block_fist : Fist = Fist(Fisttype: "block")
-//let punch_fist : Fist = Fist(Fisttype: "punch")
-
 class GameScene: SKScene {
     
-    //let player:Player = Player()
-    let opponent:Opponent = Opponent()
+    let user : player = player()
+    let opponent : Opponent = Opponent()
+    
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
     
-    var opponentUpperBound:CGFloat = 0.0
-    var opponentLowerBound:CGFloat = 0.0
+    var opponentUpperBound : CGFloat = CGFloat(3.0 * UIScreen.mainScreen().bounds.height / 4)
+    var opponentLowerBound : CGFloat = CGFloat(UIScreen.mainScreen().bounds.height / 2)
     var opponentxSpeed = CGFloat(3)
     var opponentySpeed = CGFloat(3)
     var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
     
+    var userUpperBound = CGFloat(UIScreen.mainScreen().bounds.height / 2)
+    var userLowerBound = CGFloat(UIScreen.mainScreen().bounds.height / 4)
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        backgroundColor = SKColor.blackColor()
-        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        background.position = CGPoint(
+            x: frame.size.width / 2,
+            y: frame.size.height / 2)
+        
         addChild(background)
-        
         setupOpponent()
-        //setupPlayer()
+        setupPlayer()
         
-        
+//        setupPlayer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         
+
+        let touch = touches.first! as UITouch
+        let touchLocation = touch.locationInNode(self)
+        let touchedNode = self.nodeAtPoint(touchLocation)
+        
+        if (touchedNode.name == "punch") {
+            user.punch_fist.punch(self)
+        } else if (touchedNode.name == "block") {
+            user.block_fist.block(self)
+        } else {
+            
+        }
+
         //        for touch in touches {
         //            let location = touch.locationInNode(self)
         //
@@ -56,15 +71,22 @@ class GameScene: SKScene {
         //
         //            self.addChild(sprite)
         //        }
-        sendOpponentPunch()
+        //sendOpponentPunch()
         //sendOpponentBlock()
-
-
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+
+        let leftBounds = size.width / 10
+        let rightBounds = size.width / 10 * CGFloat(9)
+        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
+        let lowerBounds = user.block_fist.position.y
+        
         moveOpponent()
+        user.moveFists(self,
+                       leftBound: leftBounds, rightBound: rightBounds,
+                       upBound: upperBounds, lowBound: lowerBounds)
     }
     
     // MARK: - Opponent Methods
@@ -112,14 +134,65 @@ class GameScene: SKScene {
     
     
     // MARK: - Player Methods
-    //    func setupPlayer(){
-    //        block_fist.position = CGPoint(x: size.width/2 - 70,
-    //                                      y: CGFloat(self.size.height / 2) - 140)
-    //        punch_fist.position = CGPoint(x: size.width/2 + 70,
-    //                                      y: CGFloat(self.size.height / 2) - 140)
-    //
-    //        addChild(block_fist)
-    //        addChild(punch_fist)
-    //    }
+    func setupPlayer(){
+        user.block_fist.position = CGPoint(
+            x: size.width/2 - user.block_fist.size.width/2,
+            y: size.height/2 - user.block_fist.size.height/2)
+        
+        user.punch_fist.position = CGPoint(
+            x: size.width/2 + user.punch_fist.size.width/2,
+            y: size.height/2 - user.punch_fist.size.height/2)
+        
+        addChild(user.block_fist)
+        addChild(user.punch_fist)
+    }
+    
+    func movePlayer(){
+        var changeDirection = false
+        user.block_fist.position.x -= CGFloat(self.opponentxSpeed)
+        user.punch_fist.position.x -= CGFloat(self.opponentxSpeed)
+        
+        // forces user to switch direction if it hits the edge
+        if(user.punch_fist.position.x >= self.rightBounds - user.block_fist.size.width
+        || user.block_fist.position.x <= self.leftBounds + user.block_fist.size.width){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        var randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            self.opponentxSpeed *= -1
+        }
+        
+        changeDirection = false
+//        opponent.position.y -= CGFloat(self.opponentySpeed)
+        
+        user.block_fist.position.y -= CGFloat(self.opponentxSpeed)
+        user.punch_fist.position.y -= CGFloat(self.opponentxSpeed)
+        
+        // forces user to switch direction if it hits the edge
+//        if(opponent.position.y > self.opponentUpperBound ||
+//            opponent.position.y < opponentLowerBound) {
+//            changeDirection = true
+//        }
+        if(user.punch_fist.position.y >= self.userUpperBound - user.block_fist.size.height
+        || user.block_fist.position.y <= self.userLowerBound + user.block_fist.size.height){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            self.opponentySpeed *= -1
+        }
+    }
 
 }
