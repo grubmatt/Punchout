@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 let screenWidth = UIScreen.mainScreen().bounds.width
 let screenHeight = UIScreen.mainScreen().bounds.height
@@ -27,6 +28,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var userUpperBound: CGFloat = 0
     var userLowerBound: CGFloat = 0
     
+    let motionManager: CMMotionManager = CMMotionManager()
+    var accelerationX: CGFloat = 0.0
+    
     var gameLength: NSTimeInterval = 31
     
     var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
@@ -45,7 +49,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         
-
         let touch = touches.first! as UITouch
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
@@ -154,7 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func movePlayer() {
         let leftBounds = self.leftBounds + user.block_fist.size.width
         let rightBounds = self.rightBounds - user.punch_fist.size.width
-        let upperBounds = self.userUpperBound
+        let upperBounds = opponent.position.y - opponent.size.height
         let lowerBounds = self.userLowerBound
         
         let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds)

@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class player {
+class player : NSNotificationCenter {
     let block_fist : fist
     let punch_fist : fist
     var score : Int
@@ -18,7 +18,7 @@ class player {
     var ySpeed : CGFloat = 3
     
     
-    init() {
+    override init() {
         block_fist = fist(fisttype: "left")
         block_fist.name = "block"
         
@@ -26,9 +26,6 @@ class player {
         punch_fist.name = "punch"
         
         score = 0
-        
-//        xSpeed = CGFloat(block_fist.size.width / 10)
-//        ySpeed = CGFloat(block_fist.size.height / 10)
     }
     
     func punch(scene : SKScene) {
@@ -108,10 +105,10 @@ class player {
         let newPunchX = (halfX + punch_fist.size.width/2)
             
         block_fist.position.y = halfY
-        block_fist.position.x = newBlockX
+        block_fist.position.x = newBlockX - 10
             
         punch_fist.position.y = halfY
-        punch_fist.position.x = newPunchX
+        punch_fist.position.x = newPunchX + 10
     }
     
     func outOfPosition() -> Bool {
@@ -121,7 +118,7 @@ class player {
         let offX = abs(distance - combWidth)
         let offY = abs(block_fist.position.y - punch_fist.position.y)
         
-        return (offX >= 5 || offY >= 5)
+        return (offX >= 15 || offY >= 15)
         
     }
     
