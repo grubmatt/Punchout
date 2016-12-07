@@ -17,10 +17,8 @@ class GameScene: SKScene {
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(UIScreen.mainScreen().bounds.width)
     
-    var opponentUpperBound : CGFloat = CGFloat(3.0 * UIScreen.mainScreen().bounds.height / 4)
-    var opponentLowerBound : CGFloat = CGFloat(UIScreen.mainScreen().bounds.height / 2)
-    var opponentxSpeed = CGFloat(3)
-    var opponentySpeed = CGFloat(3)
+    var opponentUpperBound : CGFloat = 0
+    var opponentLowerBound : CGFloat = 0
     var background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
     
     var userUpperBound = CGFloat(UIScreen.mainScreen().bounds.height / 2)
@@ -77,16 +75,12 @@ class GameScene: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-
-        let leftBounds = size.width / 10
-        let rightBounds = size.width / 10 * CGFloat(9)
-        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
-        let lowerBounds = user.block_fist.position.y
         
         moveOpponent()
-        user.moveFists(self,
-                       leftBound: leftBounds, rightBound: rightBounds,
-                       upBound: upperBounds, lowBound: lowerBounds)
+        movePlayer()
+        
+        opponentLogic()
+        
     }
     
     // MARK: - Opponent Methods
@@ -101,18 +95,33 @@ class GameScene: SKScene {
     
     func moveOpponent(){
         
-        var move:(CGFloat, CGFloat) = opponent.move(self, upperBounds: self.rightBounds - opponent.size.width, lowerBounds: self.leftBounds + opponent.size.width, speed: opponentxSpeed, position: opponent.position.x)
+        let leftBounds = self.leftBounds - opponent.size.width
+        let rightBounds = self.rightBounds + opponent.size.width
+        let upperBounds = self.opponentUpperBound
+        let lowerBounds = self.opponentLowerBound
+        
+        var move: (CGFloat, CGFloat)
+        
+        move = opponent.move(self, upperBounds: upperBounds, lowerBounds: lowerBounds, leftBounds: leftBounds, rightBounds: rightBounds, x: opponent.position.x, y: opponent.position.y)
         
         opponent.position.x = move.0
-        opponentxSpeed = move.1
+        opponent.position.y = move.1
         
-        move = opponent.move(self, upperBounds: self.opponentUpperBound, lowerBounds: opponentLowerBound, speed: opponentySpeed, position: opponent.position.y)
-        
-        opponent.position.y = move.0
-        opponentySpeed = move.1
-        
-       
     }
+    
+    func opponentLogic(){
+        // Should the opponent block
+        if(opponent.shouldBlock()){
+            //sendOpponentBlock()
+        }
+        // Should the opponent punch
+        if(opponent.shouldPunch()){
+            sendOpponentPunch()
+            opponent.lastPunch = 0
+        }
+        opponent.lastPunch += 1
+    }
+    
     
     func sendOpponentPunch(){
         let sendPunch = SKAction.runBlock(){
@@ -148,51 +157,14 @@ class GameScene: SKScene {
     }
     
     func movePlayer(){
-        var changeDirection = false
-        user.block_fist.position.x -= CGFloat(self.opponentxSpeed)
-        user.punch_fist.position.x -= CGFloat(self.opponentxSpeed)
+        let leftBounds = size.width / 10
+        let rightBounds = size.width / 10 * CGFloat(9)
+        let upperBounds = user.block_fist.position.y + user.block_fist.size.height
+        let lowerBounds = user.block_fist.position.y
         
-        // forces user to switch direction if it hits the edge
-        if(user.punch_fist.position.x >= self.rightBounds - user.block_fist.size.width
-        || user.block_fist.position.x <= self.leftBounds + user.block_fist.size.width){
-            changeDirection = true
-        }
-        
-        // 1 in 6 chance that opponent will switch direction
-        var randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
-        
-        if(changeDirection == true){
-            self.opponentxSpeed *= -1
-        }
-        
-        changeDirection = false
-//        opponent.position.y -= CGFloat(self.opponentySpeed)
-        
-        user.block_fist.position.y -= CGFloat(self.opponentxSpeed)
-        user.punch_fist.position.y -= CGFloat(self.opponentxSpeed)
-        
-        // forces user to switch direction if it hits the edge
-//        if(opponent.position.y > self.opponentUpperBound ||
-//            opponent.position.y < opponentLowerBound) {
-//            changeDirection = true
-//        }
-        if(user.punch_fist.position.y >= self.userUpperBound - user.block_fist.size.height
-        || user.block_fist.position.y <= self.userLowerBound + user.block_fist.size.height){
-            changeDirection = true
-        }
-        
-        // 1 in 6 chance that opponent will switch direction
-        randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
-        
-        if(changeDirection == true){
-            self.opponentySpeed *= -1
-        }
+        user.moveFists(self,
+                       leftBound: leftBounds, rightBound: rightBounds,
+                       upBound: upperBounds, lowBound: lowerBounds)
     }
 
 }
