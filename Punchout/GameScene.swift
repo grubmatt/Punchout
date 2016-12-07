@@ -34,8 +34,6 @@ class GameScene: SKScene {
         addChild(background)
         setupOpponent()
         setupPlayer()
-        
-//        setupPlayer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
