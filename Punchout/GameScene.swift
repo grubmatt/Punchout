@@ -42,9 +42,11 @@ class GameScene: SKScene {
             y: frame.size.height / 2)
         
         addChild(background)
+        
         setupOpponent()
         setupPlayer()
         setupTimer()
+        setupAccelerometer()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -65,7 +67,7 @@ class GameScene: SKScene {
         /* Called before each frame is rendered */
         
         moveOpponent()
-        movePlayer()
+//        movePlayer()
 
         opponentLogic()
         timer.update()
@@ -188,7 +190,7 @@ class GameScene: SKScene {
         timer.startWithDuration(gameLength)
     }
     
-    // MARK: - Accelerometer
+    // MARK: - Accelerometer Methods
     func setupAccelerometer(){
         if motionManager.accelerometerAvailable {
             motionManager.accelerometerUpdateInterval = 0.2
