@@ -12,6 +12,9 @@ import SpriteKit
 class Opponent : SKSpriteNode {
     
     var points = 0
+    var xSpeed: CGFloat = 3
+    var ySpeed: CGFloat = 3
+    var lastPunch: CGFloat = 0
     
     init() {
         let texture = SKTexture(imageNamed: "opponent_1")
@@ -38,7 +41,6 @@ class Opponent : SKSpriteNode {
         self.runAction(opponentAnimation)
         
     }
-
     
     func sendPunch(scene: SKScene){
         var opponentTextures:[SKTexture] = []
@@ -61,28 +63,67 @@ class Opponent : SKSpriteNode {
         
     }
     
-    func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat, speed: CGFloat, position: CGFloat) -> (CGFloat, CGFloat) {
+    func shouldPunch() -> Bool {
+        // Sliding chance that opponent will send a punch
+        // The more time = more likely to punch
+        let slide = UInt32(11 - Int(lastPunch)/6)
+        if(lastPunch > 15) {
+            if (Int(arc4random_uniform(slide)) == 1) {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func shouldBlock() -> Bool {
+        // 1 in 10 chance that opponent will send a punch
+        if (Int(arc4random_uniform(11)) == 1) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat, leftBounds: CGFloat, rightBounds: CGFloat, x: CGFloat, y: CGFloat) -> (CGFloat, CGFloat){
         var changeDirection = false
-        let newPosition = position - CGFloat(speed)
-        var newSpeed = speed
-
+        let newX = x - xSpeed
+        
         // forces opponent to switch direction if it hits the edge
-        if(newPosition > upperBounds || newPosition < lowerBounds){
+        if(newX >= rightBounds
+            || newX <= leftBounds){
             changeDirection = true
         }
         
         // 1 in 6 chance that opponent will switch direction
-        let randomChance = Int(arc4random_uniform(7))
+        var randomChance = Int(arc4random_uniform(7))
         if( randomChance == 1) {
             changeDirection = true
         }
         
         if(changeDirection == true){
-            newSpeed *= -1
+            xSpeed *= -1
         }
         
         changeDirection = false
         
-        return (newPosition, newSpeed)
+        let newY = y - ySpeed
+        
+        if(newY >= upperBounds
+            || newY <= lowerBounds){
+            changeDirection = true
+        }
+        
+        // 1 in 6 chance that opponent will switch direction
+        randomChance = Int(arc4random_uniform(7))
+        if( randomChance == 1) {
+            changeDirection = true
+        }
+        
+        if(changeDirection == true){
+            ySpeed *= -1
+        }
+        
+        return (newX, newY)
     }
 }
