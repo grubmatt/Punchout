@@ -98,42 +98,18 @@ class GameScene: SKScene {
     }
     
     func moveOpponent(){
-        var changeDirection = false
-        opponent.position.x -= CGFloat(self.opponentxSpeed)
         
-        // forces opponent to switch direction if it hits the edge
-        if(opponent.position.x > self.rightBounds - opponent.size.width || opponent.position.x < self.leftBounds + opponent.size.width){
-            changeDirection = true
-        }
+        var move:(CGFloat, CGFloat) = opponent.move(self, upperBounds: self.rightBounds - opponent.size.width, lowerBounds: self.leftBounds + opponent.size.width, speed: opponentxSpeed, position: opponent.position.x)
         
-        // 1 in 6 chance that opponent will switch direction
-        var randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
+        opponent.position.x = move.0
+        opponentxSpeed = move.1
         
-        if(changeDirection == true){
-            self.opponentxSpeed *= -1
-        }
+        move = opponent.move(self, upperBounds: self.opponentUpperBound, lowerBounds: opponentLowerBound, speed: opponentySpeed, position: opponent.position.y)
         
-        changeDirection = false
-        opponent.position.y -= CGFloat(self.opponentySpeed)
+        opponent.position.y = move.0
+        opponentySpeed = move.1
         
-        // forces opponent to switch direction if it hits the edge
-        if(opponent.position.y > self.opponentUpperBound ||
-            opponent.position.y < opponentLowerBound) {
-            changeDirection = true
-        }
-        
-        // 1 in 6 chance that opponent will switch direction
-        randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
-        
-        if(changeDirection == true){
-            self.opponentySpeed *= -1
-        }
+       
     }
     
     func sendOpponentPunch(){
