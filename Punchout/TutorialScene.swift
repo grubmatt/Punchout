@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class TutorialScene: SKScene, SKPhysicsContactDelegate {
+class TutorialScene: SKScene{
     
     var tutorialPosition = 0
     
@@ -22,21 +22,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
         
-        textLabel_1.position = CGPointMake(size.width/3, size.height/4)
-        name = "textLabel_1"
-        textLabel_1.text = "Block"
-        addChild(textLabel_1)
-        
-        textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
-        textLabel_2.text = "Punch"
-        addChild(textLabel_2)
-        
-        let nextButton = SKLabelNode()
-        nextButton.position = CGPointMake(size.width - size.width/8, size.height/10)
-        nextButton.name = "next"
-        nextButton.text = "Next"
-        addChild(nextButton)
-        
+        setupLabels()
         setupPlayer()
         setupOpponent()
         
@@ -63,6 +49,8 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func next() {
+        /* Transitions through each part of the game giving brief overview*/
+        
         if (tutorialPosition == 1) {
             textLabel_1.text = "Tilt to move"
             textLabel_2.text = ""
@@ -88,37 +76,51 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
     
     func runAnimations(){
         if (tutorialPosition == 2) {
-            opponent.sendBlock(self)
+            self.opponent.sendBlock(self)
         } else if (tutorialPosition == 3) {
-            opponent.sendPunch(self)
+            self.opponent.sendPunch(self)
         }
+    }
+
+    func setupLabels() {
+        textLabel_1.position = CGPointMake(size.width/3, size.height/4)
+        name = "textLabel_1"
+        textLabel_1.text = "Block"
+        
+        textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
+        textLabel_2.text = "Punch"
+        
+        let nextButton = SKLabelNode()
+        nextButton.position = CGPointMake(size.width - size.width/8, size.height/10)
+        nextButton.name = "next"
+        nextButton.text = "Next"
+        
+        addChild(textLabel_1)
+        addChild(textLabel_2)
+        addChild(nextButton)
     }
     
     func setupPlayer() {
         user.block_fist.position = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width/2,
-            y: screenHeight/2 - user.block_fist.size.height/2)
+            x: screenWidth/2 - user.block_fist.size.width,
+            y: textLabel_1.position.y + 1.2 * user.block_fist.size.height)
         
         user.punch_fist.position = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width/2,
-            y: screenHeight/2 - user.punch_fist.size.height/2)
+            x: screenWidth/2 + user.punch_fist.size.width,
+            y: textLabel_2.position.y + 1.2 * user.punch_fist.size.height)
+        
+        user.block_fist.physicsBody?.dynamic = false
+        user.punch_fist.physicsBody?.dynamic = false
         
         addChild(user.block_fist)
         addChild(user.punch_fist)
-        
-        
     }
     
     func setupOpponent(){
         opponent.position = CGPointMake(size.width/2, size.height/2)
         opponent.setScale(1.5)
+        
+        opponent.physicsBody?.dynamic = false
     }
     
-    func setupPhysics() {
-        self.physicsWorld.gravity = CGVectorMake(0, 0)
-        self.physicsWorld.contactDelegate = self
-        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
-        self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
-    }
-
 }
