@@ -46,12 +46,12 @@ class player : NSNotificationCenter {
     
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
-                   upBound : CGFloat, lowBound : CGFloat) ->
+                   upBound : CGFloat, lowBound : CGFloat, bx: CGFloat, px: CGFloat, y: CGFloat) ->
                     (CGFloat, CGFloat, CGFloat) {
         
         var changeDirection = false
-        let newPX = punch_fist.position.x - xSpeed
-        let newBX = block_fist.position.x - xSpeed
+        let newPX = px - xSpeed
+        let newBX = bx - xSpeed
         
         // forces opponent to switch direction if it hits the edge
         if(newPX > rightBound
@@ -71,10 +71,10 @@ class player : NSNotificationCenter {
         
         changeDirection = false
         
-        let newY = block_fist.position.y - ySpeed
+        let newY = y - ySpeed
                         
-        if(newY > upBound
-        || newY < lowBound){
+        if(newY < upBound
+        || newY > lowBound){
             changeDirection = true
         }
         
