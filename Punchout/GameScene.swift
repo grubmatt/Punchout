@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 let screenWidth = UIScreen.mainScreen().bounds.width
 let screenHeight = UIScreen.mainScreen().bounds.height
@@ -16,6 +17,7 @@ class GameScene: SKScene {
     let user: player = player()
     let opponent: Opponent = Opponent()
     let timer: Timer = Timer()
+
     
     let leftBounds = CGFloat(0)
     let rightBounds = CGFloat(screenWidth)
@@ -24,6 +26,9 @@ class GameScene: SKScene {
     var opponentLowerBound: CGFloat = 0
     var userUpperBound: CGFloat = 0
     var userLowerBound: CGFloat = 0
+    
+    let motionManager: CMMotionManager = CMMotionManager()
+    var accelerationX: CGFloat = 0.0
     
     var gameLength: NSTimeInterval = 31
     
@@ -45,7 +50,6 @@ class GameScene: SKScene {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         
-
         let touch = touches.first! as UITouch
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
@@ -158,7 +162,7 @@ class GameScene: SKScene {
     func movePlayer() {
         let leftBounds = self.leftBounds + user.block_fist.size.width
         let rightBounds = self.rightBounds - user.punch_fist.size.width
-        let upperBounds = self.userUpperBound
+        let upperBounds = opponent.position.y - opponent.size.height
         let lowerBounds = self.userLowerBound
         
         let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds)
@@ -182,6 +186,24 @@ class GameScene: SKScene {
         timer.fontSize = 50
         addChild(timer)
         timer.startWithDuration(gameLength)
+    }
+    
+    // MARK: - Accelerometer
+    func setupAccelerometer(){
+        if motionManager.accelerometerAvailable {
+            motionManager.accelerometerUpdateInterval = 0.2
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {
+                [weak self] (data: CMAccelerometerData?, error: NSError?) in
+                if let acceleration = data?.acceleration {
+                    self!.accelerationX = CGFloat(acceleration.x)
+                }
+                })
+        }
+    }
+    
+    override func didSimulatePhysics() {
+        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: 0)
+        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: 0)
     }
 
 }
