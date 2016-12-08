@@ -33,9 +33,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
-    var LdstX : CGFloat = 0.0
-    var RdstX : CGFloat = 0.0
-    var dstY : CGFloat = 0.0
     
     var gameLength: NSTimeInterval = 31
     
@@ -58,26 +55,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.nodeAtPoint(touchLocation)
         
         if (touchedNode.name == "punch") {
-            // suspend block physics body?
-//            user.block_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-//            user.block_fist.physicsBody?.dynamic = false
-            user.punch_fist.punch(self)
-//            user.block_fist.physicsBody?.dynamic = true
+            user.punch(self)
         } else if (touchedNode.name == "block") {
-//            user.punch_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-//            user.punch_fist.physicsBody?.dynamic = false
-            user.block_fist.block(self)
-//            user.punch_fist.physicsBody?.dynamic = true
+            user.block(self)
+            
+            // Timing based blocking
+            if (opponent.lastPunch < 20) {
+                user.score += 1
+                opponent.blocked()
+            }
         }
-//        user.restorePositions()
-//        if (user.outOfPosition()) {
-//            user.restorePositions()
-//        }
+        
+        if (user.outOfPosition()) {
+            user.restorePositions()
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
+        movePlayer()
         moveOpponent()
         sendOpponentPunch()
         updateLabels()
@@ -162,8 +159,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(user.punch_fist)
         
         
-        userUpperBound = screenHeight / 1.6
-        userLowerBound = screenHeight / 1.6 + 3 * user.block_fist.size.height
+        userUpperBound = screenHeight / 1.6 - user.block_fist.size.height
+        userLowerBound = user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -274,6 +271,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             user.punch_fist.lastPunch += 1
         }
+        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
+            secondBody.velocity = CGVector(dx: 0, dy: 0)
+        }
     }
     
     // MARK: - Accelerometer Methods
@@ -291,49 +291,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private func manualMovePlayer() {
-        
-        let userUpBounds = opponent.position.y - opponent.size.height / 2
-        let userLowBounds = userLowerBound
-        
-        if (LdstX < leftBounds) {
-            LdstX = leftBounds
-        }
-        
-        if (RdstX > rightBounds) {
-            RdstX = rightBounds
-        }
-        
-        if (dstY > userUpBounds) {
-            dstY = userUpBounds
-        }
-        
-        if (dstY < userLowBounds) {
-            dstY = userLowBounds
-        }
-        
-        let moveLeftX = SKAction.moveToX(LdstX, duration: 0.5)
-        let moveRightX = SKAction.moveToY(RdstX, duration: 0.5)
-        let moveY = SKAction.moveToY(dstY, duration: 0.5)
-        user.block_fist.runAction(moveLeftX)
-        user.block_fist.runAction(moveY)
-        user.punch_fist.runAction(moveRightX)
-        user.punch_fist.runAction(moveY)
-    }
-    
     override func didSimulatePhysics() {
-        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
-        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: accelerationY * 600)
-//        user.restorePositions()
-        
-//        user.setFistBodyPhysics(accelerationX * 600, dy : accelerationY * 600)
-        
-//        let userUpBounds = opponent.position.y - opponent.size.height / 2
-//        let userLowBounds = userLowerBound
-        
-        
-        
-//        user.restorePositions()
-        
+        user.xSpeed = accelerationX*30
+        user.ySpeed = accelerationY*60
     }
 }

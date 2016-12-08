@@ -17,8 +17,8 @@ class player: SKNode {
     var banchor : SKPhysicsJointSliding?
     var manchor : SKPhysicsJointFixed?
     
-    var xSpeed : CGFloat = 3
-    var ySpeed : CGFloat = 3
+    var xSpeed : CGFloat = 0
+    var ySpeed : CGFloat = 0
     
     /*left_pos : CGPoint, right_pos : CGPoint*/
     override init() {
@@ -39,7 +39,7 @@ class player: SKNode {
         punch_fist.position = right_pos
         
         let midPoint = getMiddlePoint(left_pos, p2: right_pos)
-        let punchVector = CGVector(dx: -punch_fist.size.width / 2,
+        let punchVector = CGVector(dx: CGFloat(0),
                                    dy: punch_fist.size.height * 2)
         let blockVector = CGVector(dx: CGFloat(0),
                                    dy: block_fist.size.height)
@@ -82,21 +82,13 @@ class player: SKNode {
     
     
     func punch(scene : SKScene) {
-        block_fist.canMove = false
-        punch_fist.punch(scene)
-        block_fist.canMove = true
-//        restorePositions()
-        
-        // add collision physics and update score: successful block +1
+        self.punch_fist.punch(scene)
     }
     
+    
     func block(scene : SKScene) {
-        punch_fist.canMove = false
-        block_fist.block(scene)
-        punch_fist.canMove = true
-//        restorePositions()
-        
-        // add collision physics and update score: successful block  +2
+        self.block_fist.block(scene)
+
     }
     
     func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
@@ -109,43 +101,21 @@ class player: SKNode {
                    upBound : CGFloat, lowBound : CGFloat, bx: CGFloat, px: CGFloat, y: CGFloat) ->
                     (CGFloat, CGFloat, CGFloat) {
         
-        var changeDirection = false
-        let newPX = px - xSpeed
-        let newBX = bx - xSpeed
+        var newPX = px + xSpeed
+        var newBX = bx + xSpeed
         
         // forces opponent to switch direction if it hits the edge
         if(newPX > rightBound
         || newBX < leftBound){
-            changeDirection = true
+            newPX = px
+            newBX = bx
         }
         
-        // 1 in 6 chance that opponent will switch direction
-        var randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
-        
-        if(changeDirection == true){
-            xSpeed *= -1
-        }
-        
-        changeDirection = false
-        
-        let newY = y - ySpeed
+        var newY = y + ySpeed
                         
-        if(newY < upBound
-        || newY > lowBound){
-            changeDirection = true
-        }
-        
-        // 1 in 6 chance that opponent will switch direction
-        randomChance = Int(arc4random_uniform(7))
-        if( randomChance == 1) {
-            changeDirection = true
-        }
-        
-        if(changeDirection == true){
-            ySpeed *= -1
+        if(newY > upBound
+        || newY < lowBound){
+            newY = y
         }
         
         // restore relative positions of the two fists
