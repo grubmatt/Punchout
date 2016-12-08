@@ -33,9 +33,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
-    var LdstX : CGFloat = 0.0
-    var RdstX : CGFloat = 0.0
-    var dstY : CGFloat = 0.0
     
     var gameLength: NSTimeInterval = 31
     
