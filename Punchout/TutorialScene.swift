@@ -65,9 +65,9 @@ class TutorialScene: SKScene{
             let waitToSendPunch = SKAction.waitForDuration(1.5)
             let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
             runAction(opponentPunch)
-            opponent.lastPunch = 0
+            opponent.framesSincePunch = 0
         }
-        opponent.lastPunch += 1
+        opponent.framesSincePunch += 1
     }
     
     func sendOpponentBlock() {
