@@ -58,7 +58,7 @@ class fist: SKSpriteNode {
     // move fist left and up
     func punch(scene: SKScene) {
         let moveX = (-self.size.width/2)
-        let moveY = self.size.height * 2.2
+        let moveY = self.size.height * 2.5
         actionHelper(scene, dx: moveX, dy: moveY)
     }
     
