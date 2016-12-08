@@ -94,7 +94,9 @@ class TutorialScene: SKScene{
     }
     
     func movePlayer() {
-        let move = user.moveFists(self, leftBound: 0, rightBound: screenWidth, upBound: screenHeight, lowBound: 0, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
+        let fistSize = user.punch_fist.size
+        
+        let move = user.moveFists(self, leftBound: fistSize.width, rightBound: screenWidth-fistSize.width, upBound: screenHeight-fistSize.height, lowBound: fistSize.height, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
         
         user.block_fist.position.x = move.0
         user.punch_fist.position.x = move.1

@@ -14,7 +14,7 @@ class Opponent : SKSpriteNode {
     var score = 0
     var xSpeed: CGFloat = 3
     var ySpeed: CGFloat = 3
-    var lastPunch: CGFloat = 0
+    var framesSincePunch: CGFloat = 0
     
     init() {
         let texture = SKTexture(imageNamed: "opponent_1")
@@ -55,11 +55,13 @@ class Opponent : SKSpriteNode {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
         }
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
-        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.2)
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.3)
         self.runAction(opponentAnimation)
         
         // Assume hit and add points
         score += 3
+        
+        framesSincePunch = 0
     }
     
     func sendBlock(scene: SKScene){
@@ -74,8 +76,8 @@ class Opponent : SKSpriteNode {
     func shouldPunch() -> Bool {
         // Sliding chance that opponent will send a punch
         // The more time = more likely to punch
-        let slide = UInt32(60 - Int(lastPunch)/6)
-        if(lastPunch > 20) {
+        let slide = UInt32(60 - Int(framesSincePunch)/6)
+        if(framesSincePunch > 20) {
             if (Int(arc4random_uniform(slide)) == 1) {
                 return true
             }
@@ -110,8 +112,8 @@ class Opponent : SKSpriteNode {
             changeDirection = true
         }
         
-        // 1 in 6 chance that opponent will switch direction
-        var randomChance = Int(arc4random_uniform(7))
+        // 1 in 10 chance that opponent will switch direction
+        var randomChance = Int(arc4random_uniform(11))
         if( randomChance == 1) {
             changeDirection = true
         }
@@ -130,7 +132,7 @@ class Opponent : SKSpriteNode {
         }
         
         // 1 in 6 chance that opponent will switch direction
-        randomChance = Int(arc4random_uniform(7))
+        randomChance = Int(arc4random_uniform(11))
         if( randomChance == 1) {
             changeDirection = true
         }
