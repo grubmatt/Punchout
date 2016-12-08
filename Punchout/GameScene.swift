@@ -59,7 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if (touchedNode.name == "block") {
             user.block(self)
             // Timing based blocking
-            if (opponent.lastPunch < 20) {
+            if (opponent.framesSincePunch < 40) {
                 user.score += 2
                 opponent.blocked()
             }
@@ -70,8 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
         
         movePlayer()
-        moveOpponent()
-        sendOpponentPunch()
+        makeOpponentMove()
         updateLabels()
         
         // Transitions to home screen
@@ -90,10 +89,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         opponentLowerBound = opponent.position.y
     }
     
-    func moveOpponent(){
+    func makeOpponentMove(){
         
-        let leftBounds = self.leftBounds + opponent.size.width
-        let rightBounds = self.rightBounds - opponent.size.width
+        opponent.framesSincePunch += 1
+        
+        let leftBounds = self.leftBounds + opponent.size.width + user.punch_fist.size.width/2
+        let rightBounds = self.rightBounds - opponent.size.width - user.punch_fist.size.width/2
         let upperBounds = self.opponentUpperBound
         let lowerBounds = self.opponentLowerBound
         
@@ -109,9 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         opponent.position.x = move.0
         opponent.position.y = move.1
-    }
-    
-    func sendOpponentPunch(){
+        
         // Should the opponent punch
         if(opponent.shouldPunch()){
             let sendPunch = SKAction.runBlock(){
@@ -120,9 +119,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let waitToSendPunch = SKAction.waitForDuration(1.5)
             let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
             runAction(opponentPunch)
-            opponent.lastPunch = 0
+            opponent.framesSincePunch = 0
         }
-        opponent.lastPunch += 1
     }
     
     func checkBlock() -> Bool {
@@ -141,7 +139,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Player Methods
     func setupPlayer() {
-        let offset = CGFloat(10)
+        let offset = CGFloat(20)
         let left = CGPoint(
             x: screenWidth/2 - user.block_fist.size.width/2 - offset,
             y: screenHeight/2 - user.block_fist.size.height/2)
@@ -152,11 +150,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         user.setFistsPos(left, right_pos: right)
+        
         addChild(user.block_fist)
         addChild(user.punch_fist)
         
-        userUpperBound = screenHeight / 1.6 - user.block_fist.size.height
-        userLowerBound = user.block_fist.size.height
+        userUpperBound = screenHeight / 1.6 - 1.5 * user.block_fist.size.height
+        userLowerBound = userUpperBound - user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -182,6 +181,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupBackground() {
+        self.backgroundColor = SKColor.blackColor()
+        
         userScore.text = "0"
         userScore.fontSize = 30
         userScore.position = CGPointMake(screenWidth/10, screenHeight-screenHeight/10)
@@ -204,8 +205,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.addJoint(user.pbanchor!)
-//        self.physicsWorld.addJoint(user.banchor!)
-//        self.physicsWorld.addJoint(user.manchor!)
         
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
         self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
@@ -250,15 +249,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
             (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
             
-            // Make sure its been at least 20 frames since last hit
-            if(user.punch_fist.lastPunch > 17) {
+            // Make sure its been at least 30 frames since last hit
+            if(user.punch_fist.lastPunch > 30) {
                 if (!checkBlock()) {
-                    user.score += 1
+                    user.score += 3
                 } else {
-                    opponent.score += 2
+                    opponent.score += 1
                 }
                 
-                user.punch_fist.lastPunch = -1
+                user.punch_fist.lastPunch = 0
             }
             
             user.punch_fist.lastPunch += 1
@@ -277,14 +276,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 [weak self] (data: CMAccelerometerData?, error: NSError?) in
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
-                    self!.accelerationY = CGFloat(acceleration.y)
+                    self!.accelerationY = CGFloat(acceleration.y + 0.75)
                 }
             })
         }
     }
     
     override func didSimulatePhysics() {
-        user.xSpeed = accelerationX*30
-        user.ySpeed = accelerationY*30
+        user.xSpeed = accelerationX*50
+        user.ySpeed = accelerationY*50
     }
 }
