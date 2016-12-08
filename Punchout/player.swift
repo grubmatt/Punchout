@@ -105,17 +105,22 @@ class player: SKNode {
         var newBX = bx + xSpeed
         
         // forces opponent to switch direction if it hits the edge
-        if(newPX > rightBound
-        || newBX < leftBound){
-            newPX = px
-            newBX = bx
+        while(newPX > rightBound) {
+            newPX -= 2
+            newBX -= 2
+        }
+        while(newBX < leftBound){
+            newPX += 2
+            newBX += 2
         }
         
         var newY = y + ySpeed
                         
-        if(newY > upBound
-        || newY < lowBound){
-            newY = y
+        while(newY > upBound) {
+            newY -= 2
+        }
+        while(newY < lowBound){
+            newY += 2
         }
         
         // restore relative positions of the two fists
