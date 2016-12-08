@@ -94,7 +94,9 @@ class TutorialScene: SKScene{
     }
     
     func movePlayer() {
-        let move = user.moveFists(self, leftBound: 0, rightBound: screenWidth, upBound: screenHeight, lowBound: 0, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
+        let fistSize = user.punch_fist.size
+        
+        let move = user.moveFists(self, leftBound: fistSize.width, rightBound: screenWidth-fistSize.width, upBound: screenHeight-fistSize.height, lowBound: fistSize.height, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
         
         user.block_fist.position.x = move.0
         user.punch_fist.position.x = move.1
@@ -121,16 +123,20 @@ class TutorialScene: SKScene{
     }
     
     func setupPlayer() {
+        let offset = CGFloat(10)
         let left = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width,
+            x: screenWidth/2 - user.block_fist.size.width/2 - offset,
             y: screenHeight/2)
         
         let right = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width,
+            x: screenWidth/2 + user.punch_fist.size.width/2 + offset,
             y: screenHeight/2)
+        
+        user.setFistsPos(left, right_pos: right)
         
         user.block_fist.physicsBody?.dynamic = false
         user.punch_fist.physicsBody?.dynamic = false
+        
         
         addChild(user.block_fist)
         addChild(user.punch_fist)

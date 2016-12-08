@@ -13,16 +13,13 @@ class player: SKNode {
     let block_fist : fist
     let punch_fist : fist
     var score : Int = 0
-    var panchor : SKPhysicsJointSliding?
-    var banchor : SKPhysicsJointSliding?
-    var manchor : SKPhysicsJointFixed?
+    var pbanchor : SKPhysicsJointSliding?
+    var manchor : SKPhysicsJointLimit?
     
     var xSpeed : CGFloat = 0
     var ySpeed : CGFloat = 0
     
-    /*left_pos : CGPoint, right_pos : CGPoint*/
     override init() {
-        
         block_fist = fist(fisttype: "left")
         block_fist.name = "block"
         
@@ -39,30 +36,15 @@ class player: SKNode {
         punch_fist.position = right_pos
         
         let midPoint = getMiddlePoint(left_pos, p2: right_pos)
-        let punchVector = CGVector(dx: CGFloat(0),
-                                   dy: punch_fist.size.height * 2)
-        let blockVector = CGVector(dx: CGFloat(0),
-                                   dy: block_fist.size.height)
         
-        panchor = SKPhysicsJointSliding.jointWithBodyA(
+        let pbVector = CGVector(dx: CGFloat(0), dy: CGFloat(90))
+        
+        pbanchor = SKPhysicsJointSliding.jointWithBodyA(
             punch_fist.physicsBody!,
             bodyB: block_fist.physicsBody!,
             anchor: midPoint,
-            axis: punchVector)
-        panchor?.shouldEnableLimits = false
-        
-        banchor = SKPhysicsJointSliding.jointWithBodyA(
-            block_fist.physicsBody!,
-            bodyB: punch_fist.physicsBody!,
-            anchor: midPoint,
-            axis: blockVector)
-        banchor?.shouldEnableLimits = false
-        
-//        manchor = SKPhysicsJointFixed.jointWithBodyA(
-//            punch_fist.physicsBody!,
-//            bodyB: block_fist.physicsBody!,
-//            anchor: midPoint
-//        )
+            axis: pbVector)
+        pbanchor?.shouldEnableLimits = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -79,8 +61,6 @@ class player: SKNode {
         return CGPoint(x: (lx+rx)/2 , y: (ly+ry)/2)
     }
     
-    
-    
     func punch(scene : SKScene) {
         self.punch_fist.punch(scene)
     }
@@ -88,7 +68,6 @@ class player: SKNode {
     
     func block(scene : SKScene) {
         self.block_fist.block(scene)
-
     }
     
     func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
@@ -123,54 +102,7 @@ class player: SKNode {
             newY += 2
         }
         
-        // restore relative positions of the two fists
-        // so they stay close together
-        if (outOfPosition()) {
-            restorePositions()
-        }
-        
         return (newBX, newPX, newY)
-    }
-    
-    // Move fists back together after moveFists
-    func restorePositions() {
-        let halfY = (block_fist.position.y + punch_fist.position.y) / 2
-        let halfX = (block_fist.position.x + punch_fist.position.x) / 2
-        let newBlockX = (halfX - block_fist.size.width / 2)
-        let newPunchX = (halfX + punch_fist.size.width / 2)
-            
-        block_fist.position.y = halfY
-        block_fist.position.x = newBlockX - 10
-            
-        punch_fist.position.y = halfY
-        punch_fist.position.x = newPunchX + 10
-    }
-    
-    func outOfPosition() -> Bool {
-        let offset = CGFloat(10)
-        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
-        let punchBound = block_fist.position.x + combWidth + offset
-        let blockBound = punch_fist.position.x - combWidth - offset
-        
-        let yDis = abs(block_fist.position.y - punch_fist.position.y)
-        
-        return (block_fist.position.x >= blockBound
-            ||  punch_fist.position.x <= punchBound
-            ||  yDis >= offset)
-//        
-//        
-//        
-//        let distance = block_fist.position.x - punch_fist.position.x
-//        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
-//        
-//        let offset = CGFloat(10)
-//        
-//        let offY = abs(block_fist.position.y - punch_fist.position.y)
-//        
-//        return ((distance <= 0)
-//            || (distance >= combWidth + offset)
-//            || offY > offset)
-//        
     }
     
     
