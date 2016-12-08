@@ -13,9 +13,9 @@ class player: SKNode {
     let block_fist : fist
     let punch_fist : fist
     var score : Int = 0
-    var panchor : SKPhysicsJointSliding?
-    var banchor : SKPhysicsJointSliding?
-    var manchor : SKPhysicsJointFixed?
+//    var panchor : SKPhysicsJointSliding?
+//    var banchor : SKPhysicsJointSliding?
+    var manchor : SKPhysicsJointLimit?
     
     var xSpeed : CGFloat = 0
     var ySpeed : CGFloat = 0
@@ -38,31 +38,31 @@ class player: SKNode {
         block_fist.position = left_pos
         punch_fist.position = right_pos
         
-        let midPoint = getMiddlePoint(left_pos, p2: right_pos)
-        let punchVector = CGVector(dx: CGFloat(0),
-                                   dy: punch_fist.size.height * 2)
-        let blockVector = CGVector(dx: CGFloat(0),
-                                   dy: block_fist.size.height)
+//        let midPoint = getMiddlePoint(left_pos, p2: right_pos)
+//        let punchVector = CGVector(dx: CGFloat(0),
+//                                   dy: CGFloat(10))
+//        let blockVector = CGVector(dx: CGFloat(0),
+//                                   dy: CGFloat(10))
         
-        panchor = SKPhysicsJointSliding.jointWithBodyA(
-            punch_fist.physicsBody!,
-            bodyB: block_fist.physicsBody!,
-            anchor: midPoint,
-            axis: punchVector)
-        panchor?.shouldEnableLimits = false
-        
-        banchor = SKPhysicsJointSliding.jointWithBodyA(
-            block_fist.physicsBody!,
-            bodyB: punch_fist.physicsBody!,
-            anchor: midPoint,
-            axis: blockVector)
-        banchor?.shouldEnableLimits = false
-        
-//        manchor = SKPhysicsJointFixed.jointWithBodyA(
+//        panchor = SKPhysicsJointSliding.jointWithBodyA(
 //            punch_fist.physicsBody!,
 //            bodyB: block_fist.physicsBody!,
-//            anchor: midPoint
-//        )
+//            anchor: midPoint,
+//            axis: punchVector)
+//        panchor?.shouldEnableLimits = false
+//        
+//        banchor = SKPhysicsJointSliding.jointWithBodyA(
+//            block_fist.physicsBody!,
+//            bodyB: punch_fist.physicsBody!,
+//            anchor: midPoint,
+//            axis: blockVector)
+//        banchor?.shouldEnableLimits = false
+        
+        manchor = SKPhysicsJointLimit.jointWithBodyA(
+            punch_fist.physicsBody!,
+            bodyB: block_fist.physicsBody!,
+            anchorA: punch_fist.position,
+            anchorB: block_fist.position)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -83,12 +83,12 @@ class player: SKNode {
     
     func punch(scene : SKScene) {
         self.punch_fist.punch(scene)
+
     }
     
     
     func block(scene : SKScene) {
         self.block_fist.block(scene)
-
     }
     
     func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
