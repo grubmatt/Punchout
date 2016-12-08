@@ -141,14 +141,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Player Methods
     func setupPlayer() {
-    
+        let offset = CGFloat(10)
         let left = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width/2,
+            x: screenWidth/2 - user.block_fist.size.width/2 - offset,
             y: screenHeight/2 - user.block_fist.size.height/2)
         
         let right = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width/2,
+            x: screenWidth/2 + user.punch_fist.size.width/2 + offset,
             y: screenHeight/2 - user.punch_fist.size.height/2)
+        
         
         user.setFistsPos(left, right_pos: right)
         addChild(user.block_fist)
@@ -171,9 +172,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         user.block_fist.position.y = move.2
         user.punch_fist.position.y = move.2
         
-        if (user.outOfPosition()) {
-            user.restorePositions()
-        }
+//        if (user.outOfPosition()) {
+//            user.restorePositions()
+//        }
     }
     
     // MARK: - Game Management Methods
@@ -206,9 +207,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func setupPhysics() {
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
-//        self.physicsWorld.addJoint(user.panchor!)
+        self.physicsWorld.addJoint(user.pbanchor!)
 //        self.physicsWorld.addJoint(user.banchor!)
-        self.physicsWorld.addJoint(user.manchor!)
+//        self.physicsWorld.addJoint(user.manchor!)
         
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
         self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody

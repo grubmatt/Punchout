@@ -121,16 +121,20 @@ class TutorialScene: SKScene{
     }
     
     func setupPlayer() {
+        let offset = CGFloat(10)
         let left = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width,
+            x: screenWidth/2 - user.block_fist.size.width/2 - offset,
             y: screenHeight/2)
         
         let right = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width,
+            x: screenWidth/2 + user.punch_fist.size.width/2 + offset,
             y: screenHeight/2)
+        
+        user.setFistsPos(left, right_pos: right)
         
         user.block_fist.physicsBody?.dynamic = false
         user.punch_fist.physicsBody?.dynamic = false
+        
         
         addChild(user.block_fist)
         addChild(user.punch_fist)

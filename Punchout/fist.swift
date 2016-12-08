@@ -39,12 +39,14 @@ class fist: SKSpriteNode {
             self.physicsBody?.contactTestBitMask = CollisionCategories.Opponent
             self.physicsBody?.collisionBitMask = 0x0
             self.physicsBody?.affectedByGravity = false
+            self.physicsBody?.allowsRotation = false
         } else {
             self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
             self.physicsBody?.dynamic = true
             self.physicsBody?.usesPreciseCollisionDetection = true
             self.physicsBody?.collisionBitMask = 0x0
             self.physicsBody?.affectedByGravity = false
+            self.physicsBody?.allowsRotation = false
         }
         
     }
