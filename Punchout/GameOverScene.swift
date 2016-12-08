@@ -66,6 +66,12 @@ class GameOverScene: SKScene {
         spotLight.alpha = 0.5
         addChild(spotLight)
         
+        let highScoreButton = SKLabelNode()
+        highScoreButton.position = CGPointMake(size.width/2,size.height/5)
+        highScoreButton.name = "addScore"
+        highScoreButton.text = "Add Score"
+        addChild(highScoreButton)
+        
         let backToMenuButton = SKLabelNode()
         backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
         backToMenuButton.name = "menu"
@@ -84,6 +90,15 @@ class GameOverScene: SKScene {
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(menuScene,transition: transitionType)
         }
+        if touchedNode.name == "addScore" {
+            let scoreScene = AddScoreScene(size: size)
+            scoreScene.userScore = userScore
+            scoreScene.opponentScore = opponentScore
+            scoreScene.scaleMode = scaleMode
+            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            view?.presentScene(scoreScene,transition: transitionType)
+        }
+
     }
 }
 

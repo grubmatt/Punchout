@@ -43,18 +43,10 @@ class StartGameScene: SKScene {
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "shortgame" {
             let shortScene = GameScene(size: size)
-            shortScene.gameLength = 31
+            shortScene.gameLength = 4
             shortScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(shortScene,transition: transitionType)
-        }
-        
-        if touchedNode.name == "longgame" {
-            let longScene = GameScene(size: size)
-            longScene.gameLength = 6
-            longScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(longScene,transition: transitionType)
         }
         
         if touchedNode.name == "tutorial" {

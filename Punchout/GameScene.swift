@@ -276,7 +276,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 [weak self] (data: CMAccelerometerData?, error: NSError?) in
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
-                    self!.accelerationY = CGFloat(acceleration.y + 0.75)
+                    self!.accelerationY = CGFloat(acceleration.y + 0.6)
                 }
             })
         }
