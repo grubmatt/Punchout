@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let user: player = player()
     let opponent: Opponent = Opponent()
     let timer: Timer = Timer()
+
     let userScore: SKLabelNode = SKLabelNode()
     let opponentScore: SKLabelNode = SKLabelNode()
     let background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
@@ -31,18 +32,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
+    var accelerationY: CGFloat = 0.0
     
     var gameLength: NSTimeInterval = 31
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        
-        setupBackground()
-        setupTimer()
-        setupPhysics()
 
+        setupBackground()
         setupOpponent()
         setupPlayer()
+        setupTimer()
+        setupAccelerometer()
+        setupPhysics()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -53,18 +55,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.nodeAtPoint(touchLocation)
         
         if (touchedNode.name == "punch") {
-            user.punch_fist.punch(self)
+            user.punch(self)
         } else if (touchedNode.name == "block") {
-            user.block_fist.block(self)
+            user.block(self)
+            
+            // Timing based blocking
+            if (opponent.lastPunch < 20) {
+                user.score += 1
+                opponent.blocked()
+            }
+        }
+        if (user.outOfPosition()) {
+            user.restorePositions()
         }
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
-        moveOpponent()
         movePlayer()
-
+        moveOpponent()
         sendOpponentPunch()
         updateLabels()
         
@@ -146,8 +156,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(user.block_fist)
         addChild(user.punch_fist)
         
-        userUpperBound = screenHeight / 1.6
-        userLowerBound = screenHeight / 1.6 + 3 * user.block_fist.size.height
+        
+        userUpperBound = screenHeight / 1.6 - user.block_fist.size.height
+        userLowerBound = user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -192,6 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(userScore)
         addChild(opponentScore)
         addChild(background)
+
     }
     
     func setupPhysics() {
@@ -252,24 +264,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             user.punch_fist.lastPunch += 1
         }
+        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
+            secondBody.velocity = CGVector(dx: 0, dy: 0)
+        }
     }
     
-    // MARK: - Accelerometer
+    // MARK: - Accelerometer Methods
     func setupAccelerometer(){
-        if motionManager.accelerometerAvailable {
-            motionManager.accelerometerUpdateInterval = 0.2
+        if motionManager.accelerometerAvailable == true {
+            // 2
+            motionManager.accelerometerUpdateInterval = 0.1
             motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {
                 [weak self] (data: CMAccelerometerData?, error: NSError?) in
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
+                    self!.accelerationY = CGFloat(acceleration.y)
                 }
-                })
+            })
         }
     }
     
     override func didSimulatePhysics() {
-        user.punch_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: 0)
-        user.block_fist.physicsBody?.velocity = CGVector(dx: accelerationX * 600, dy: 0)
+        user.xSpeed = accelerationX*30
+        user.ySpeed = accelerationY*60
     }
-
 }

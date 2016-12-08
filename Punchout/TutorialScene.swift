@@ -7,8 +7,15 @@
 //
 
 import SpriteKit
+import CoreMotion
 
-class TutorialScene: SKScene, SKPhysicsContactDelegate {
+
+class TutorialScene: SKScene{
+    
+    
+    let motionManager: CMMotionManager = CMMotionManager()
+    var accelerationX: CGFloat = 0.0
+    var accelerationY: CGFloat = 0.0
     
     var tutorialPosition = 0
     
@@ -22,21 +29,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
         
-        textLabel_1.position = CGPointMake(size.width/3, size.height/4)
-        name = "textLabel_1"
-        textLabel_1.text = "Block"
-        addChild(textLabel_1)
-        
-        textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
-        textLabel_2.text = "Punch"
-        addChild(textLabel_2)
-        
-        let nextButton = SKLabelNode()
-        nextButton.position = CGPointMake(size.width - size.width/8, size.height/10)
-        nextButton.name = "next"
-        nextButton.text = "Next"
-        addChild(nextButton)
-        
+        setupLabels()
         setupPlayer()
         setupOpponent()
         
@@ -60,10 +53,14 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         runAnimations()
+        movePlayer()
     }
     
     func next() {
+        /* Transitions through each part of the game giving brief overview*/
+        
         if (tutorialPosition == 1) {
+            setupAccelerometer()
             textLabel_1.text = "Tilt to move"
             textLabel_2.text = ""
             
@@ -78,6 +75,8 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
         } else if (tutorialPosition == 3) {
             textLabel_1.text = "Opponent Punching"
             textLabel_2.text = "Block this!"
+            
+            textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
@@ -86,39 +85,81 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func runAnimations(){
+    func runAnimations() {
         if (tutorialPosition == 2) {
-            opponent.sendBlock(self)
+            self.opponent.sendBlock(self)
         } else if (tutorialPosition == 3) {
-            opponent.sendPunch(self)
+            self.opponent.sendPunch(self)
         }
+    }
+    
+    func movePlayer() {
+        let move = user.moveFists(self, leftBound: 0, rightBound: screenWidth, upBound: screenHeight, lowBound: 0, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
+        
+        user.block_fist.position.x = move.0
+        user.punch_fist.position.x = move.1
+        user.block_fist.position.y = move.2
+        user.punch_fist.position.y = move.2
+    }
+
+    func setupLabels() {
+        textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
+        name = "textLabel_1"
+        textLabel_1.text = "Block"
+        
+        textLabel_2.position = CGPointMake(2/3*size.width, screenHeight/2 - user.punch_fist.size.height)
+        textLabel_2.text = "Punch"
+        
+        let nextButton = SKLabelNode()
+        nextButton.position = CGPointMake(size.width - size.width/8, size.height/10)
+        nextButton.name = "next"
+        nextButton.text = "Next"
+        
+        addChild(textLabel_1)
+        addChild(textLabel_2)
+        addChild(nextButton)
     }
     
     func setupPlayer() {
         user.block_fist.position = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width/2,
-            y: screenHeight/2 - user.block_fist.size.height/2)
+            x: screenWidth/2 - user.block_fist.size.width,
+            y: screenHeight/2)
         
         user.punch_fist.position = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width/2,
-            y: screenHeight/2 - user.punch_fist.size.height/2)
+            x: screenWidth/2 + user.punch_fist.size.width,
+            y: screenHeight/2)
+        
+        user.block_fist.physicsBody?.dynamic = false
+        user.punch_fist.physicsBody?.dynamic = false
         
         addChild(user.block_fist)
         addChild(user.punch_fist)
-        
-        
     }
     
     func setupOpponent(){
         opponent.position = CGPointMake(size.width/2, size.height/2)
         opponent.setScale(1.5)
+        
+        opponent.physicsBody?.dynamic = false
     }
     
-    func setupPhysics() {
-        self.physicsWorld.gravity = CGVectorMake(0, 0)
-        self.physicsWorld.contactDelegate = self
-        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
-        self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+    // MARK: - Accelerometer Methods
+    func setupAccelerometer(){
+        if motionManager.accelerometerAvailable == true {
+            // 2
+            motionManager.accelerometerUpdateInterval = 0.1
+            motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler: {
+                [weak self] (data: CMAccelerometerData?, error: NSError?) in
+                if let acceleration = data?.acceleration {
+                    self!.accelerationX = CGFloat(acceleration.x)
+                    self!.accelerationY = CGFloat(acceleration.y)
+                }
+                })
+        }
     }
-
+    
+    override func didSimulatePhysics() {
+        user.xSpeed = accelerationX*30
+        user.ySpeed = accelerationY*60
+    }
 }

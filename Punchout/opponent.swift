@@ -24,13 +24,12 @@ class Opponent : SKSpriteNode {
         
         // preparing opponent for collisions once we add physics...
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
-        self.physicsBody?.dynamic
+        self.physicsBody?.dynamic = true
         self.physicsBody?.usesPreciseCollisionDetection = true
         self.physicsBody?.categoryBitMask = CollisionCategories.Opponent
         self.physicsBody?.contactTestBitMask = CollisionCategories.Punch
         self.physicsBody?.collisionBitMask = 0x0
-
-        
+        self.physicsBody?.affectedByGravity = false
         
         animate()
     }
@@ -52,13 +51,15 @@ class Opponent : SKSpriteNode {
     
     func sendPunch(scene: SKScene){
         var opponentTextures:[SKTexture] = []
-        for i in 1...3 {
+        for i in 2...3 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
         }
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
-        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15)
+        let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.2)
         self.runAction(opponentAnimation)
         
+        // Assume hit and add points
+        score += 3
     }
     
     func sendBlock(scene: SKScene){
@@ -73,8 +74,8 @@ class Opponent : SKSpriteNode {
     func shouldPunch() -> Bool {
         // Sliding chance that opponent will send a punch
         // The more time = more likely to punch
-        let slide = UInt32(11 - Int(lastPunch)/6)
-        if(lastPunch > 17) {
+        let slide = UInt32(60 - Int(lastPunch)/6)
+        if(lastPunch > 20) {
             if (Int(arc4random_uniform(slide)) == 1) {
                 return true
             }
@@ -90,6 +91,13 @@ class Opponent : SKSpriteNode {
         } else {
             return false
         }
+    }
+    
+    func blocked() {
+        // When opponent punches they automatically assume the hit and add points
+        // This removes those points
+        
+        score -= 3
     }
     
     func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat, leftBounds: CGFloat, rightBounds: CGFloat, x: CGFloat, y: CGFloat) -> (CGFloat, CGFloat){

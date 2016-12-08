@@ -166,8 +166,8 @@
 		6822159F1DEFB0B000EE3186 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				682215A01DEFB0D100EE3186 /* opponent.swift */,
 				015EA5671DEFB24900710A8D /* fist.swift */,
+				682215A01DEFB0D100EE3186 /* opponent.swift */,
 				682215AE1DEFC22F00EE3186 /* OpponentPunch.swift */,
 				682215B01DEFCC5600EE3186 /* OpponentBlock.swift */,
 				01FD87671DF094AA00AEED0C /* player.swift */,
@@ -245,7 +245,7 @@
 				TargetAttributes = {
 					015EA52E1DEFA83B00710A8D = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = FNN9U4KF98;
+						DevelopmentTeam = 2FKM3XG543;
 						ProvisioningStyle = Automatic;
 					};
 					015EA5481DEFA83B00710A8D = {
@@ -479,11 +479,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = FNN9U4KF98;
+				DEVELOPMENT_TEAM = 2FKM3XG543;
 				INFOPLIST_FILE = Punchout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = IS67442.Punchout;
+				PRODUCT_BUNDLE_IDENTIFIER = Matt.Punchout;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
 			};
@@ -495,11 +495,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = FNN9U4KF98;
+				DEVELOPMENT_TEAM = 2FKM3XG543;
 				INFOPLIST_FILE = Punchout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = IS67442.Punchout;
+				PRODUCT_BUNDLE_IDENTIFIER = Matt.Punchout;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 2.3;
 			};
