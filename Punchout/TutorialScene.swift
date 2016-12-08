@@ -9,8 +9,7 @@
 import SpriteKit
 import CoreMotion
 
-
-class TutorialScene: SKScene{
+class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     
     let motionManager: CMMotionManager = CMMotionManager()
@@ -32,7 +31,7 @@ class TutorialScene: SKScene{
         setupLabels()
         setupPlayer()
         setupOpponent()
-        
+        setupPhysics()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -40,7 +39,6 @@ class TutorialScene: SKScene{
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "next" {
-            tutorialPosition += 1
             next()
         }
         if (touchedNode.name == "punch") {
@@ -56,8 +54,36 @@ class TutorialScene: SKScene{
         movePlayer()
     }
     
+    func sendOpponentPunch(){
+        // Should the opponent punch
+        if(opponent.shouldPunch()){
+            let sendPunch = SKAction.runBlock(){
+                self.opponent.sendPunch(self)
+            }
+            let waitToSendPunch = SKAction.waitForDuration(1.5)
+            let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
+            runAction(opponentPunch)
+            opponent.framesSincePunch = 0
+        }
+        opponent.framesSincePunch += 1
+    }
+    
+    func sendOpponentBlock() {
+        // Should the opponent block
+        if (Int(arc4random_uniform(25)) == 1) {
+            let sendBlock = SKAction.runBlock(){
+                self.opponent.sendBlock(self)
+            }
+            let waitToSendBlock = SKAction.waitForDuration(3)
+            let opponentBlock = SKAction.sequence([sendBlock, waitToSendBlock])
+            runAction(opponentBlock)
+        }
+    }
+    
     func next() {
         /* Transitions through each part of the game giving brief overview*/
+        
+        tutorialPosition += 1
         
         if (tutorialPosition == 1) {
             setupAccelerometer()
@@ -74,22 +100,22 @@ class TutorialScene: SKScene{
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
             textLabel_1.text = "Opponent Punching"
-            textLabel_2.text = "Block this!"
+            textLabel_2.text = "Block This!"
             
             textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
     }
     
     func runAnimations() {
         if (tutorialPosition == 2) {
-            self.opponent.sendBlock(self)
+            sendOpponentBlock()
         } else if (tutorialPosition == 3) {
-            self.opponent.sendPunch(self)
+            sendOpponentPunch()
         }
     }
     
@@ -103,7 +129,7 @@ class TutorialScene: SKScene{
         user.block_fist.position.y = move.2
         user.punch_fist.position.y = move.2
     }
-
+    
     func setupLabels() {
         textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
         name = "textLabel_1"
@@ -134,12 +160,18 @@ class TutorialScene: SKScene{
         
         user.setFistsPos(left, right_pos: right)
         
-        user.block_fist.physicsBody?.dynamic = false
-        user.punch_fist.physicsBody?.dynamic = false
-        
-        
         addChild(user.block_fist)
         addChild(user.punch_fist)
+    }
+    
+    func setupPhysics() {
+        self.physicsWorld.gravity = CGVectorMake(0, 0)
+        self.physicsWorld.contactDelegate = self
+        self.physicsWorld.addJoint(user.pbanchor!)
+        
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
+        self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+        
     }
     
     func setupOpponent(){

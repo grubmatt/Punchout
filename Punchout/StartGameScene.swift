@@ -30,7 +30,7 @@ class StartGameScene: SKScene {
         let shortGameButton = SKLabelNode()
         shortGameButton.position = CGPointMake(size.width/2,size.height/4)
         shortGameButton.name = "shortgame"
-        shortGameButton.text = "30 sec - Fight"
+        shortGameButton.text = "Fight"
         addChild(shortGameButton)
         
         let highScoreButton = SKLabelNode()
@@ -56,7 +56,7 @@ class StartGameScene: SKScene {
             shortScene.gameLength = 31
             shortScene.highScore = dm.score
             shortScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.flipHorizontalWithDuration(0.75)
             view?.presentScene(shortScene,transition: transitionType)
         }
         
@@ -65,14 +65,14 @@ class StartGameScene: SKScene {
             let highScoreScene = HighScoreScene(size: size)
             highScoreScene.highScore = dm.score
             highScoreScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Down, duration: 0.75)
             view?.presentScene(highScoreScene,transition: transitionType)
         }
         
         if touchedNode.name == "tutorial" {
             let tutorialScene = TutorialScene(size: size)
             tutorialScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.75)
             view?.presentScene(tutorialScene,transition: transitionType)
         }
     }

@@ -13,9 +13,9 @@ class AddScoreScene: SKScene, UITextViewDelegate {
     
     var userScore: Int32 = 0
     var opponentScore: Int32 = 0
-
+    
     var highScoreText = UITextView()
-
+    
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
@@ -28,7 +28,6 @@ class AddScoreScene: SKScene, UITextViewDelegate {
         addChild(introToMessage)
         
         highScoreText = UITextView(frame: CGRectMake(size.width/4, size.height/2 - 15, 200, 30))
-        highScoreText.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
         self.view!.addSubview(highScoreText)
         
         let addScoreButton = SKLabelNode()
@@ -55,12 +54,12 @@ class AddScoreScene: SKScene, UITextViewDelegate {
             highScoreText.removeFromSuperview()
             
             dm.score = scoreObject
-
+            
             dm.saveScore()
             let highScoreScene = HighScoreScene(size: size)
             highScoreScene.highScore = dm.score
             highScoreScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.flipVerticalWithDuration(0.75)
             view?.presentScene(highScoreScene,transition: transitionType)
         }
     }
