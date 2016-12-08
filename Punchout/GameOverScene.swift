@@ -16,7 +16,7 @@ class GameOverScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
-       
+        
         var introText: String = ""
         var color: UIColor = UIColor.clearColor()
         var position: CGPoint
@@ -66,7 +66,7 @@ class GameOverScene: SKScene {
         spotLight.alpha = 0.5
         addChild(spotLight)
         
-        if(userScore > highScore.userScore && userWin) {
+        if(userWin && userScore > highScore.userScore) {
             let highScoreLabel = SKLabelNode()
             highScoreLabel.position = CGPointMake(size.width/2,size.height/4.5)
             highScoreLabel.text = "New High Score!"
@@ -96,7 +96,7 @@ class GameOverScene: SKScene {
         if touchedNode.name == "menu" {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.flipHorizontalWithDuration(0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
         if touchedNode.name == "addScore" {
@@ -105,7 +105,7 @@ class GameOverScene: SKScene {
             scoreScene.scaleMode = scaleMode
             view?.presentScene(scoreScene)
         }
-
+        
     }
 }
 

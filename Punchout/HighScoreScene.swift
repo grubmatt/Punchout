@@ -11,7 +11,7 @@ import SpriteKit
 class HighScoreScene: SKScene {
     
     var highScore: Score = Score()
-
+    
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
         
@@ -38,7 +38,7 @@ class HighScoreScene: SKScene {
         spotLight.setScale(1)
         spotLight.alpha = 0.5
         addChild(spotLight)
-
+        
         
     }
     
@@ -49,7 +49,7 @@ class HighScoreScene: SKScene {
         if touchedNode.name == "menu" {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Up, duration: 0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
     }
