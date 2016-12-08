@@ -121,11 +121,11 @@ class TutorialScene: SKScene{
     }
     
     func setupPlayer() {
-        user.block_fist.position = CGPoint(
+        let left = CGPoint(
             x: screenWidth/2 - user.block_fist.size.width,
             y: screenHeight/2)
         
-        user.punch_fist.position = CGPoint(
+        let right = CGPoint(
             x: screenWidth/2 + user.punch_fist.size.width,
             y: screenHeight/2)
         

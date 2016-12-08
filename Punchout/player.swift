@@ -13,7 +13,9 @@ class player: SKNode {
     let block_fist : fist
     let punch_fist : fist
     var score : Int = 0
-    var anchor : SKPhysicsJointPin?
+    var panchor : SKPhysicsJointSliding?
+    var banchor : SKPhysicsJointSliding?
+    var manchor : SKPhysicsJointFixed?
     
     var xSpeed : CGFloat = 0
     var ySpeed : CGFloat = 0
@@ -23,22 +25,44 @@ class player: SKNode {
         
         block_fist = fist(fisttype: "left")
         block_fist.name = "block"
-//        block_fist.position = left_pos
         
         punch_fist = fist(fisttype: "right")
         punch_fist.name = "punch"
-//        punch_fist.position = right_pos
         
         score = 0
         
         super.init()
+    }
+    
+    func setFistsPos(left_pos : CGPoint, right_pos : CGPoint) {
+        block_fist.position = left_pos
+        punch_fist.position = right_pos
         
-//        let midPoint = getMiddlePoint(left_pos, p2: right_pos)
+        let midPoint = getMiddlePoint(left_pos, p2: right_pos)
+        let punchVector = CGVector(dx: CGFloat(0),
+                                   dy: punch_fist.size.height * 2)
+        let blockVector = CGVector(dx: CGFloat(0),
+                                   dy: block_fist.size.height)
         
-//        anchor = SKPhysicsJointPin.jointWithBodyA(
-//            block_fist.physicsBody!,
-//            bodyB: punch_fist.physicsBody!,
-//            anchor: midPoint)
+        panchor = SKPhysicsJointSliding.jointWithBodyA(
+            punch_fist.physicsBody!,
+            bodyB: block_fist.physicsBody!,
+            anchor: midPoint,
+            axis: punchVector)
+        panchor?.shouldEnableLimits = false
+        
+        banchor = SKPhysicsJointSliding.jointWithBodyA(
+            block_fist.physicsBody!,
+            bodyB: punch_fist.physicsBody!,
+            anchor: midPoint,
+            axis: blockVector)
+        banchor?.shouldEnableLimits = false
+        
+//        manchor = SKPhysicsJointFixed.jointWithBodyA(
+//            punch_fist.physicsBody!,
+//            bodyB: block_fist.physicsBody!,
+//            anchor: midPoint
+//        )
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,8 +85,10 @@ class player: SKNode {
         self.punch_fist.punch(scene)
     }
     
+    
     func block(scene : SKScene) {
         self.block_fist.block(scene)
+
     }
     
     func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
@@ -79,17 +105,22 @@ class player: SKNode {
         var newBX = bx + xSpeed
         
         // forces opponent to switch direction if it hits the edge
-        if(newPX > rightBound
-        || newBX < leftBound){
-            newPX = px
-            newBX = bx
+        while(newPX > rightBound) {
+            newPX -= 2
+            newBX -= 2
+        }
+        while(newBX < leftBound){
+            newPX += 2
+            newBX += 2
         }
         
         var newY = y + ySpeed
                         
-        if(newY > upBound
-        || newY < lowBound){
-            newY = y
+        while(newY > upBound) {
+            newY -= 2
+        }
+        while(newY < lowBound){
+            newY += 2
         }
         
         // restore relative positions of the two fists
@@ -105,8 +136,8 @@ class player: SKNode {
     func restorePositions() {
         let halfY = (block_fist.position.y + punch_fist.position.y) / 2
         let halfX = (block_fist.position.x + punch_fist.position.x) / 2
-        let newBlockX = (halfX - block_fist.size.width)
-        let newPunchX = (halfX + punch_fist.size.width)
+        let newBlockX = (halfX - block_fist.size.width / 2)
+        let newPunchX = (halfX + punch_fist.size.width / 2)
             
         block_fist.position.y = halfY
         block_fist.position.x = newBlockX - 10
@@ -116,17 +147,30 @@ class player: SKNode {
     }
     
     func outOfPosition() -> Bool {
-        let distance = block_fist.position.x - punch_fist.position.x
-        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
-        
         let offset = CGFloat(10)
+        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
+        let punchBound = block_fist.position.x + combWidth + offset
+        let blockBound = punch_fist.position.x - combWidth - offset
         
-        let offY = abs(block_fist.position.y - punch_fist.position.y)
+        let yDis = abs(block_fist.position.y - punch_fist.position.y)
         
-        return ((distance <= 0)
-            || (distance >= combWidth + offset)
-            || offY > offset)
-        
+        return (block_fist.position.x >= blockBound
+            ||  punch_fist.position.x <= punchBound
+            ||  yDis >= offset)
+//        
+//        
+//        
+//        let distance = block_fist.position.x - punch_fist.position.x
+//        let combWidth = block_fist.size.width / 2 + punch_fist.size.width / 2
+//        
+//        let offset = CGFloat(10)
+//        
+//        let offY = abs(block_fist.position.y - punch_fist.position.y)
+//        
+//        return ((distance <= 0)
+//            || (distance >= combWidth + offset)
+//            || offY > offset)
+//        
     }
     
     

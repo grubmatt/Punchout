@@ -45,7 +45,6 @@ class fist: SKSpriteNode {
             self.physicsBody?.usesPreciseCollisionDetection = true
             self.physicsBody?.collisionBitMask = 0x0
             self.physicsBody?.affectedByGravity = false
-
         }
         
     }
