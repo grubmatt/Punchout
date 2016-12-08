@@ -9,7 +9,6 @@
 import SpriteKit
 import CoreMotion
 
-
 class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     
@@ -72,7 +71,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     func sendOpponentBlock() {
         // Should the opponent block
-        if (Int(arc4random_uniform(100)) == 1) {
+        if (Int(arc4random_uniform(25)) == 1) {
             let sendBlock = SKAction.runBlock(){
                 self.opponent.sendBlock(self)
             }
@@ -100,7 +99,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
             textLabel_1.text = "Opponent Punching"
-            textLabel_2.text = "Tap Block!"
+            textLabel_2.text = "Block This!"
             
             textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
         } else if (tutorialPosition == 4) {

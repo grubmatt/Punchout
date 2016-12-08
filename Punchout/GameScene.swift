@@ -276,7 +276,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 [weak self] (data: CMAccelerometerData?, error: NSError?) in
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
-                    self!.accelerationY = CGFloat(acceleration.y + 0.75)
+                    self!.accelerationY = CGFloat(acceleration.y + 0.5)
                 }
             })
         }
@@ -284,6 +284,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didSimulatePhysics() {
         user.xSpeed = accelerationX*50
-        user.ySpeed = accelerationY*50
+        user.ySpeed = accelerationY*35
     }
 }
