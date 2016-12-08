@@ -11,7 +11,7 @@ import SpriteKit
 
 class Opponent : SKSpriteNode {
     
-    var score = 0
+    var score: Int32 = 0
     var xSpeed: CGFloat = 3
     var ySpeed: CGFloat = 3
     var framesSincePunch: CGFloat = 0

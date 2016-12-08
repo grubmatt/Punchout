@@ -7,34 +7,37 @@
 //
 
 import SpriteKit
-import CoreData
 
 class HighScoreScene: SKScene {
     
-    let entityName = "Score"
-    let coreDataStack = CoreDataStack()
+    var highScore: Score = Score()
 
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
+                
+        let introMessage = SKLabelNode()
+        introMessage.position = CGPointMake(size.width/2,9/10*size.height)
+        introMessage.text = "High Score!"
+        introMessage.fontSize = 30
+        addChild(introMessage)
         
-        // retrieving data with CoreData
-        let fetchRequest = NSFetchRequest(entityName: entityName)
+        let nameLabel = SKLabelNode()
+        nameLabel.position = CGPointMake(size.width/2,6/10*size.height)
+        nameLabel.text = highScore.name
+        nameLabel.fontSize = 30
+        addChild(nameLabel)
         
-        let sort = NSSortDescriptor(key:"name", ascending: true)
-        fetchRequest.sortDescriptors = [sort]
+        let userScoreLabel = SKLabelNode()
+        userScoreLabel.position = CGPointMake(size.width/2,5/10*size.height)
+        userScoreLabel.text = String(highScore.userScore)
+        userScoreLabel.fontSize = 30
+        addChild(userScoreLabel)
         
-//        if let results = try? coreDataStack.context.executeFetchRequest(fetchRequest) as! [Score] {
-//            text = String(results.count)
-//        } else {
-//            print("There was an error getting the results")
-//        }
-        
-        
-        let introToMessage = SKLabelNode()
-        introToMessage.position = CGPointMake(size.width/2,9/10*size.height)
-        introToMessage.text = ""
-        introToMessage.fontSize = 30
-        addChild(introToMessage)
+        let opponentScoreLabel = SKLabelNode()
+        opponentScoreLabel.position = CGPointMake(size.width/2,4/10*size.height)
+        opponentScoreLabel.text = String(highScore.opponentScore)
+        opponentScoreLabel.fontSize = 30
+        addChild(opponentScoreLabel)
         
         let backToMenuButton = SKLabelNode()
         backToMenuButton.position = CGPointMake(size.width/2,size.height/7)

@@ -11,8 +11,9 @@ import SpriteKit
 class GameOverScene: SKScene {
     
     var userWin: Bool = true
-    var userScore: Int = 0
-    var opponentScore: Int = 0
+    var userScore: Int32 = 0
+    var opponentScore: Int32 = 0
+    var highScore: Score = Score()
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
@@ -66,17 +67,19 @@ class GameOverScene: SKScene {
         spotLight.alpha = 0.5
         addChild(spotLight)
         
-        let highScoreButton = SKLabelNode()
-        highScoreButton.position = CGPointMake(size.width/2,size.height/5)
-        highScoreButton.name = "addScore"
-        highScoreButton.text = "Add Score"
-        addChild(highScoreButton)
-        
-        let backToMenuButton = SKLabelNode()
-        backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
-        backToMenuButton.name = "menu"
-        backToMenuButton.text = "Main Menu"
-        addChild(backToMenuButton)
+        if(userScore > highScore.userScore) {
+            let highScoreButton = SKLabelNode()
+            highScoreButton.position = CGPointMake(size.width/2,size.height/5)
+            highScoreButton.name = "addScore"
+            highScoreButton.text = "Add Score"
+            addChild(highScoreButton)
+        } else {
+            let backToMenuButton = SKLabelNode()
+            backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
+            backToMenuButton.name = "menu"
+            backToMenuButton.text = "Main Menu"
+            addChild(backToMenuButton)
+        }
         
     }
     
@@ -95,8 +98,7 @@ class GameOverScene: SKScene {
             scoreScene.userScore = userScore
             scoreScene.opponentScore = opponentScore
             scoreScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(scoreScene,transition: transitionType)
+            view?.presentScene(scoreScene)
         }
 
     }

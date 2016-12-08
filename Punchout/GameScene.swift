@@ -22,8 +22,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let opponentScore: SKLabelNode = SKLabelNode()
     let background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
     
-    let leftBounds = CGFloat(0)
-    let rightBounds = CGFloat(screenWidth)
+    let leftBounds: CGFloat = 0
+    let rightBounds: CGFloat = screenWidth
     
     var opponentUpperBound: CGFloat = 0
     var opponentLowerBound: CGFloat = 0
@@ -34,7 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
     
-    var gameLength: NSTimeInterval = 31
+    var gameLength: NSTimeInterval = 30
+    var highScore: Score = Score()
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -228,6 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverScene.userWin = userWin
         gameOverScene.userScore = user.score
         gameOverScene.opponentScore = opponent.score
+        gameOverScene.highScore = highScore
         let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
         view?.presentScene(gameOverScene,transition: transitionType)
     }

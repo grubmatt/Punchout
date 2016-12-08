@@ -10,6 +10,9 @@ import UIKit
 import SpriteKit
 
 class StartGameScene: SKScene {
+    
+    let dm = DataManager()
+    
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
         
@@ -30,8 +33,14 @@ class StartGameScene: SKScene {
         shortGameButton.text = "30 sec - Fight"
         addChild(shortGameButton)
         
+        let highScoreButton = SKLabelNode()
+        highScoreButton.position = CGPointMake(size.width/2,size.height/5.5)
+        highScoreButton.name = "highscore"
+        highScoreButton.text = "High Score"
+        addChild(highScoreButton)
+        
         let tutorialButton = SKLabelNode()
-        tutorialButton.position = CGPointMake(size.width/2,size.height/9)
+        tutorialButton.position = CGPointMake(size.width/2,size.height/8)
         tutorialButton.name = "tutorial"
         tutorialButton.text = "Tutorial"
         addChild(tutorialButton)
@@ -42,11 +51,22 @@ class StartGameScene: SKScene {
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "shortgame" {
+            dm.loadScore()
             let shortScene = GameScene(size: size)
             shortScene.gameLength = 4
+            shortScene.highScore = dm.score
             shortScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(shortScene,transition: transitionType)
+        }
+        
+        if touchedNode.name == "highscore" {
+            dm.loadScore()
+            let highScoreScene = HighScoreScene(size: size)
+            highScoreScene.highScore = dm.score
+            highScoreScene.scaleMode = scaleMode
+            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            view?.presentScene(highScoreScene,transition: transitionType)
         }
         
         if touchedNode.name == "tutorial" {

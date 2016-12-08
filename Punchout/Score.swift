@@ -9,11 +9,29 @@
 import Foundation
 import CoreData
 
-public class Score: NSManagedObject {
+public class Score: NSObject {
     
-    @NSManaged public var name: String
-    @NSManaged public var userScore: NSNumber
-    @NSManaged public var opponentScore: NSNumber
-    @NSManaged public var id: NSNumber
+    var name: String
+    var userScore: Int32
+    var opponentScore: Int32
     
+    override init() {
+        self.name = ""
+        self.userScore = 0
+        self.opponentScore = 0
+        super.init()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        self.name = aDecoder.decodeObjectForKey("Name") as! String
+        self.userScore = aDecoder.decodeIntForKey("UserScore") 
+        self.opponentScore = aDecoder.decodeIntForKey("OpponentScore") 
+        super.init()
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(name, forKey: "Name")
+        aCoder.encodeInt(userScore, forKey: "UserScore")
+        aCoder.encodeInt(opponentScore, forKey: "OpponentScore")
+    }
 }

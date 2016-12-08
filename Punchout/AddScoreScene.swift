@@ -7,12 +7,11 @@
 //
 
 import SpriteKit
-import CoreData
 
 class AddScoreScene: SKScene {
     
-    var userScore: Int = 0
-    var opponentScore: Int = 0
+    var userScore: Int32 = 0
+    var opponentScore: Int32 = 0
 
     var highScoreText = UITextView()
 
@@ -36,41 +35,28 @@ class AddScoreScene: SKScene {
         addScoreButton.name = "addScore"
         addScoreButton.text = "Add Score"
         addChild(addScoreButton)
-        
-        let backToMenuButton = SKLabelNode()
-        backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
-        backToMenuButton.name = "menu"
-        backToMenuButton.text = "Main Menu"
-        addChild(backToMenuButton)
-        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let touch = touches.first! as UITouch
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
-        if touchedNode.name == "menu" {
-            let menuScene = StartGameScene(size: size)
-            menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
-            view?.presentScene(menuScene,transition: transitionType)
-        }
         if touchedNode.name == "addScore" {
-            let entityName = "Score"
-            let coreDataStack = CoreDataStack()
-            let scoreEntity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: coreDataStack.context)
             
-            let newScore = Score(entity: scoreEntity!, insertIntoManagedObjectContext: coreDataStack.context)
+            let dm = DataManager()
+            let scoreObject = Score()
             
-            newScore.id = 1
-            newScore.name = highScoreText.text
-            newScore.userScore = userScore
-            newScore.opponentScore = opponentScore
+            scoreObject.name = highScoreText.text
+            scoreObject.userScore = userScore
+            scoreObject.opponentScore = opponentScore
             
+            highScoreText.removeFromSuperview()
             
-            coreDataStack.saveContext()
-            
+            dm.score = scoreObject
+
+            dm.saveScore()
             let highScoreScene = HighScoreScene(size: size)
+            highScoreScene.highScore = dm.score
             highScoreScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(highScoreScene,transition: transitionType)
