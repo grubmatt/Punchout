@@ -156,7 +156,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(user.punch_fist)
         
         userUpperBound = screenHeight / 1.6 - 1.5 * user.block_fist.size.height
-        userLowerBound = userUpperBound - user.block_fist.size.height
+        userLowerBound = userUpperBound - 1.5 * user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -228,7 +228,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverScene.scaleMode = scaleMode
         gameOverScene.userWin = userWin
         gameOverScene.userScore = user.score
-        gameOverScene.opponentScore = opponent.score
         gameOverScene.highScore = highScore
         let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
         view?.presentScene(gameOverScene,transition: transitionType)
@@ -278,7 +277,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 [weak self] (data: CMAccelerometerData?, error: NSError?) in
                 if let acceleration = data?.acceleration {
                     self!.accelerationX = CGFloat(acceleration.x)
-                    self!.accelerationY = CGFloat(acceleration.y + 0.6)
+                    self!.accelerationY = CGFloat(acceleration.y + 0.65)
                 }
             })
         }
@@ -286,6 +285,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didSimulatePhysics() {
         user.xSpeed = accelerationX*50
-        user.ySpeed = accelerationY*50
+        user.ySpeed = accelerationY*25
     }
 }

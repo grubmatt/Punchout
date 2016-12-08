@@ -7,8 +7,9 @@
 //
 
 import SpriteKit
+import UIKit
 
-class AddScoreScene: SKScene {
+class AddScoreScene: SKScene, UITextViewDelegate {
     
     var userScore: Int32 = 0
     var opponentScore: Int32 = 0
@@ -21,20 +22,22 @@ class AddScoreScene: SKScene {
         
         
         let introToMessage = SKLabelNode()
-        introToMessage.position = CGPointMake(size.width/2,9/10*size.height)
+        introToMessage.position = CGPointMake(size.width/2,3/4*size.height)
         introToMessage.text = "Enter Name:"
         introToMessage.fontSize = 30
         addChild(introToMessage)
         
-        highScoreText = UITextView(frame: CGRectMake(size.width/4, size.height/6, 200, 30))
+        highScoreText = UITextView(frame: CGRectMake(size.width/4, size.height/2 - 15, 200, 30))
         highScoreText.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
         self.view!.addSubview(highScoreText)
         
         let addScoreButton = SKLabelNode()
-        addScoreButton.position = CGPointMake(size.width/2,4/6*size.height)
+        addScoreButton.position = CGPointMake(size.width/2,size.height/4)
         addScoreButton.name = "addScore"
         addScoreButton.text = "Add Score"
         addChild(addScoreButton)
+        
+        highScoreText.delegate = self
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -48,7 +51,6 @@ class AddScoreScene: SKScene {
             
             scoreObject.name = highScoreText.text
             scoreObject.userScore = userScore
-            scoreObject.opponentScore = opponentScore
             
             highScoreText.removeFromSuperview()
             
@@ -61,7 +63,14 @@ class AddScoreScene: SKScene {
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
             view?.presentScene(highScoreScene,transition: transitionType)
         }
-        
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }
 

@@ -12,7 +12,6 @@ class GameOverScene: SKScene {
     
     var userWin: Bool = true
     var userScore: Int32 = 0
-    var opponentScore: Int32 = 0
     var highScore: Score = Score()
     
     override func didMoveToView(view: SKView) {
@@ -67,9 +66,16 @@ class GameOverScene: SKScene {
         spotLight.alpha = 0.5
         addChild(spotLight)
         
-        if(userScore > highScore.userScore) {
+        if(userScore > highScore.userScore && userWin) {
+            let highScoreLabel = SKLabelNode()
+            highScoreLabel.position = CGPointMake(size.width/2,size.height/4.5)
+            highScoreLabel.text = "New High Score!"
+            highScoreLabel.fontSize = 30
+            highScoreLabel.fontColor = color
+            addChild(highScoreLabel)
+            
             let highScoreButton = SKLabelNode()
-            highScoreButton.position = CGPointMake(size.width/2,size.height/5)
+            highScoreButton.position = CGPointMake(size.width/2,size.height/7)
             highScoreButton.name = "addScore"
             highScoreButton.text = "Add Score"
             addChild(highScoreButton)
@@ -96,7 +102,6 @@ class GameOverScene: SKScene {
         if touchedNode.name == "addScore" {
             let scoreScene = AddScoreScene(size: size)
             scoreScene.userScore = userScore
-            scoreScene.opponentScore = opponentScore
             scoreScene.scaleMode = scaleMode
             view?.presentScene(scoreScene)
         }

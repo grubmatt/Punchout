@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Punchout/Score.swift"
-            timestampString = "502916240.189165"
+            timestampString = "502922552.299666"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "encodeWithCoder(aCoder:)"
             landmarkType = "7">
          </BreakpointContent>

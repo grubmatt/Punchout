@@ -77,7 +77,7 @@ class Opponent : SKSpriteNode {
         // Sliding chance that opponent will send a punch
         // The more time = more likely to punch
         let slide = UInt32(60 - Int(framesSincePunch)/6)
-        if(framesSincePunch > 20) {
+        if(framesSincePunch > 30) {
             if (Int(arc4random_uniform(slide)) == 1) {
                 return true
             }
@@ -98,7 +98,6 @@ class Opponent : SKSpriteNode {
     func blocked() {
         // When opponent punches they automatically assume the hit and add points
         // This removes those points
-        
         score -= 3
     }
     

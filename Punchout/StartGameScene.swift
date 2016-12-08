@@ -40,7 +40,7 @@ class StartGameScene: SKScene {
         addChild(highScoreButton)
         
         let tutorialButton = SKLabelNode()
-        tutorialButton.position = CGPointMake(size.width/2,size.height/8)
+        tutorialButton.position = CGPointMake(size.width/2,size.height/9)
         tutorialButton.name = "tutorial"
         tutorialButton.text = "Tutorial"
         addChild(tutorialButton)
@@ -53,7 +53,7 @@ class StartGameScene: SKScene {
         if touchedNode.name == "shortgame" {
             dm.loadScore()
             let shortScene = GameScene(size: size)
-            shortScene.gameLength = 4
+            shortScene.gameLength = 31
             shortScene.highScore = dm.score
             shortScene.scaleMode = scaleMode
             let transitionType = SKTransition.flipHorizontalWithDuration(1.0)

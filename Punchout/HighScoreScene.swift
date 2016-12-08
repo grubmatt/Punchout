@@ -14,36 +14,31 @@ class HighScoreScene: SKScene {
 
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
-                
-        let introMessage = SKLabelNode()
-        introMessage.position = CGPointMake(size.width/2,9/10*size.height)
-        introMessage.text = "High Score!"
-        introMessage.fontSize = 30
-        addChild(introMessage)
         
         let nameLabel = SKLabelNode()
-        nameLabel.position = CGPointMake(size.width/2,6/10*size.height)
+        nameLabel.position = CGPointMake(size.width/2,3/5*size.height)
         nameLabel.text = highScore.name
-        nameLabel.fontSize = 30
+        nameLabel.fontSize = 60
         addChild(nameLabel)
         
         let userScoreLabel = SKLabelNode()
-        userScoreLabel.position = CGPointMake(size.width/2,5/10*size.height)
-        userScoreLabel.text = String(highScore.userScore)
-        userScoreLabel.fontSize = 30
+        userScoreLabel.position = CGPointMake(size.width/2,size.height/2)
+        userScoreLabel.text = String(highScore.userScore) + " Points"
+        userScoreLabel.fontSize = 50
         addChild(userScoreLabel)
-        
-        let opponentScoreLabel = SKLabelNode()
-        opponentScoreLabel.position = CGPointMake(size.width/2,4/10*size.height)
-        opponentScoreLabel.text = String(highScore.opponentScore)
-        opponentScoreLabel.fontSize = 30
-        addChild(opponentScoreLabel)
         
         let backToMenuButton = SKLabelNode()
         backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
         backToMenuButton.name = "menu"
         backToMenuButton.text = "Main Menu"
         addChild(backToMenuButton)
+        
+        let spotLight = SKSpriteNode(imageNamed: "spot_light")
+        spotLight.position = CGPointMake(size.width/2, 3/5*size.height)
+        spotLight.setScale(1)
+        spotLight.alpha = 0.5
+        addChild(spotLight)
+
         
     }
     
