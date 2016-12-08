@@ -12,9 +12,9 @@ import SpriteKit
 class player: SKNode {
     let block_fist : fist
     let punch_fist : fist
-    var score : Int = 0
-    var pbanchor : SKPhysicsJointSliding?
-    var manchor : SKPhysicsJointLimit?
+    var score: Int32 = 0
+    var pbanchor: SKPhysicsJointSliding?
+    var manchor: SKPhysicsJointLimit?
     
     var xSpeed : CGFloat = 0
     var ySpeed : CGFloat = 0

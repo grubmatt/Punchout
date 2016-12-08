@@ -39,7 +39,6 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "next" {
-            tutorialPosition += 1
             next()
         }
         if (touchedNode.name == "punch") {
@@ -84,6 +83,8 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     func next() {
         /* Transitions through each part of the game giving brief overview*/
         
+        tutorialPosition += 1
+        
         if (tutorialPosition == 1) {
             setupAccelerometer()
             textLabel_1.text = "Tilt to move"
@@ -105,7 +106,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
     }
@@ -128,7 +129,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         user.block_fist.position.y = move.2
         user.punch_fist.position.y = move.2
     }
-
+    
     func setupLabels() {
         textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
         name = "textLabel_1"

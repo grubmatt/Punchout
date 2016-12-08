@@ -11,12 +11,12 @@ import SpriteKit
 class GameOverScene: SKScene {
     
     var userWin: Bool = true
-    var userScore: Int = 0
-    var opponentScore: Int = 0
+    var userScore: Int32 = 0
+    var highScore: Score = Score()
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
-       
+        
         var introText: String = ""
         var color: UIColor = UIColor.clearColor()
         var position: CGPoint
@@ -66,11 +66,26 @@ class GameOverScene: SKScene {
         spotLight.alpha = 0.5
         addChild(spotLight)
         
-        let backToMenuButton = SKLabelNode()
-        backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
-        backToMenuButton.name = "menu"
-        backToMenuButton.text = "Main Menu"
-        addChild(backToMenuButton)
+        if(userWin && userScore > highScore.userScore) {
+            let highScoreLabel = SKLabelNode()
+            highScoreLabel.position = CGPointMake(size.width/2,size.height/4.5)
+            highScoreLabel.text = "New High Score!"
+            highScoreLabel.fontSize = 30
+            highScoreLabel.fontColor = color
+            addChild(highScoreLabel)
+            
+            let highScoreButton = SKLabelNode()
+            highScoreButton.position = CGPointMake(size.width/2,size.height/7)
+            highScoreButton.name = "addScore"
+            highScoreButton.text = "Add Score"
+            addChild(highScoreButton)
+        } else {
+            let backToMenuButton = SKLabelNode()
+            backToMenuButton.position = CGPointMake(size.width/2,size.height/7)
+            backToMenuButton.name = "menu"
+            backToMenuButton.text = "Main Menu"
+            addChild(backToMenuButton)
+        }
         
     }
     
@@ -81,9 +96,16 @@ class GameOverScene: SKScene {
         if touchedNode.name == "menu" {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.flipHorizontalWithDuration(0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
+        if touchedNode.name == "addScore" {
+            let scoreScene = AddScoreScene(size: size)
+            scoreScene.userScore = userScore
+            scoreScene.scaleMode = scaleMode
+            view?.presentScene(scoreScene)
+        }
+        
     }
 }
 

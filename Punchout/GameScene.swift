@@ -17,13 +17,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let user: player = player()
     let opponent: Opponent = Opponent()
     let timer: Timer = Timer()
-
+    
     let userScore: SKLabelNode = SKLabelNode()
     let opponentScore: SKLabelNode = SKLabelNode()
     let background = SKSpriteNode(imageNamed: "boxing_ring_412x512")
     
-    let leftBounds = CGFloat(0)
-    let rightBounds = CGFloat(screenWidth)
+    let leftBounds: CGFloat = 0
+    let rightBounds: CGFloat = screenWidth
     
     var opponentUpperBound: CGFloat = 0
     var opponentLowerBound: CGFloat = 0
@@ -34,11 +34,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var accelerationX: CGFloat = 0.0
     var accelerationY: CGFloat = 0.0
     
-    var gameLength: NSTimeInterval = 31
+    var gameLength: NSTimeInterval = 30
+    var highScore: Score = Score()
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-
+        
         setupBackground()
         setupOpponent()
         setupPlayer()
@@ -101,12 +102,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var move: (CGFloat, CGFloat)
         
         move = opponent.move(self,
-        upperBounds: upperBounds,
-        lowerBounds: lowerBounds,
-        leftBounds: leftBounds,
-        rightBounds: rightBounds,
-        x: opponent.position.x,
-        y: opponent.position.y)
+                             upperBounds: upperBounds,
+                             lowerBounds: lowerBounds,
+                             leftBounds: leftBounds,
+                             rightBounds: rightBounds,
+                             x: opponent.position.x,
+                             y: opponent.position.y)
         
         opponent.position.x = move.0
         opponent.position.y = move.1
@@ -155,7 +156,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(user.punch_fist)
         
         userUpperBound = screenHeight / 1.6 - 1.5 * user.block_fist.size.height
-        userLowerBound = userUpperBound - user.block_fist.size.height
+        userLowerBound = userUpperBound - 1.5 * user.block_fist.size.height
     }
     
     func movePlayer() {
@@ -184,12 +185,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = SKColor.blackColor()
         
         userScore.text = "0"
-        userScore.fontSize = 30
-        userScore.position = CGPointMake(screenWidth/10, screenHeight-screenHeight/10)
+        userScore.fontSize = 25
+        userScore.position = CGPointMake(screenWidth/5, 9/10*screenHeight)
         
         opponentScore.text = "0"
-        opponentScore.fontSize = 30
-        opponentScore.position = CGPointMake(screenWidth-screenWidth/10, screenHeight-screenHeight/10)
+        opponentScore.fontSize = 25
+        opponentScore.position = CGPointMake(4/5*screenWidth, 9/10*screenHeight)
         
         background.position = CGPoint(
             x: frame.size.width / 2,
@@ -198,7 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(userScore)
         addChild(opponentScore)
         addChild(background)
-
+        
     }
     
     func setupPhysics() {
@@ -213,8 +214,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateLabels() {
         timer.update()
-        userScore.text = String(user.score)
-        opponentScore.text = String(opponent.score)
+        userScore.text = "User: " + String(user.score)
+        opponentScore.text = "Mike: " + String(opponent.score)
     }
     
     func transitionToGameOver() {
@@ -227,8 +228,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverScene.scaleMode = scaleMode
         gameOverScene.userWin = userWin
         gameOverScene.userScore = user.score
-        gameOverScene.opponentScore = opponent.score
-        let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+        gameOverScene.highScore = highScore
+        var color = UIColor()
+        if(userWin) {
+            color = UIColor.greenColor()
+        } else {
+            color = UIColor.redColor()
+        }
+        let transitionType = SKTransition.fadeWithColor(color, duration: 0.5)
         view?.presentScene(gameOverScene,transition: transitionType)
     }
     
@@ -278,7 +285,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self!.accelerationX = CGFloat(acceleration.x)
                     self!.accelerationY = CGFloat(acceleration.y + 0.5)
                 }
-            })
+                })
         }
     }
     
