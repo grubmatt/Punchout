@@ -164,17 +164,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let rightBounds = self.rightBounds - user.punch_fist.size.width
         let upperBounds = userUpperBound
         let lowerBounds = userLowerBound
-    
+        
         let move = user.moveFists(self, leftBound: leftBounds, rightBound: rightBounds, upBound: upperBounds, lowBound: lowerBounds, bx: user.block_fist.position.x, px: user.punch_fist.position.x, y: user.block_fist.position.y)
-                
+        
         user.block_fist.position.x = move.0
         user.punch_fist.position.x = move.1
         user.block_fist.position.y = move.2
         user.punch_fist.position.y = move.2
-        
-//        if (user.outOfPosition()) {
-//            user.restorePositions()
-//        }
     }
     
     // MARK: - Game Management Methods

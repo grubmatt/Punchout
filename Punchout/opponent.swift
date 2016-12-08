@@ -68,7 +68,6 @@ class Opponent : SKSpriteNode {
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
         let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.2)
         self.runAction(opponentAnimation)
-        
     }
     
     func shouldPunch() -> Bool {

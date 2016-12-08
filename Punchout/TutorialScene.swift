@@ -56,6 +56,32 @@ class TutorialScene: SKScene{
         movePlayer()
     }
     
+    func sendOpponentPunch(){
+        // Should the opponent punch
+        if(opponent.shouldPunch()){
+            let sendPunch = SKAction.runBlock(){
+                self.opponent.sendPunch(self)
+            }
+            let waitToSendPunch = SKAction.waitForDuration(1.5)
+            let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
+            runAction(opponentPunch)
+            opponent.lastPunch = 0
+        }
+        opponent.lastPunch += 1
+    }
+    
+    func sendOpponentBlock() {
+        // Should the opponent block
+        if (Int(arc4random_uniform(100)) == 1) {
+            let sendBlock = SKAction.runBlock(){
+                self.opponent.sendBlock(self)
+            }
+            let waitToSendBlock = SKAction.waitForDuration(3)
+            let opponentBlock = SKAction.sequence([sendBlock, waitToSendBlock])
+            runAction(opponentBlock)
+        }
+    }
+    
     func next() {
         /* Transitions through each part of the game giving brief overview*/
         
@@ -74,7 +100,7 @@ class TutorialScene: SKScene{
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
             textLabel_1.text = "Opponent Punching"
-            textLabel_2.text = "Block this!"
+            textLabel_2.text = "Tap Block!"
             
             textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
         } else if (tutorialPosition == 4) {
@@ -87,9 +113,10 @@ class TutorialScene: SKScene{
     
     func runAnimations() {
         if (tutorialPosition == 2) {
-            self.opponent.sendBlock(self)
+//            self.opponent.sendBlock(self)
+            sendOpponentBlock()
         } else if (tutorialPosition == 3) {
-            self.opponent.sendPunch(self)
+            sendOpponentPunch()
         }
     }
     
