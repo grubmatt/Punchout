@@ -60,20 +60,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (touchedNode.name == "punch") {
             // suspend block physics body?
 //            user.block_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-            user.block_fist.physicsBody?.dynamic = false
+//            user.block_fist.physicsBody?.dynamic = false
             user.punch_fist.punch(self)
-            user.block_fist.physicsBody?.dynamic = true
+//            user.block_fist.physicsBody?.dynamic = true
         } else if (touchedNode.name == "block") {
 //            user.punch_fist.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-            user.punch_fist.physicsBody?.dynamic = false
+//            user.punch_fist.physicsBody?.dynamic = false
             user.block_fist.block(self)
-            user.punch_fist.physicsBody?.dynamic = true
-            
+//            user.punch_fist.physicsBody?.dynamic = true
         }
 //        user.restorePositions()
-        if (user.outOfPosition()) {
-            user.restorePositions()
-        }
+//        if (user.outOfPosition()) {
+//            user.restorePositions()
+//        }
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -150,14 +149,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Player Methods
     func setupPlayer() {
-        user.block_fist.position = CGPoint(
-            x: screenWidth/2 - user.block_fist.size.width/2,
+        let offset = CGFloat(10)
+        let left = CGPoint(
+            x: screenWidth/2 - user.block_fist.size.width/2 - offset,
             y: screenHeight/2 - user.block_fist.size.height/2)
         
-        user.punch_fist.position = CGPoint(
-            x: screenWidth/2 + user.punch_fist.size.width/2,
+        let right = CGPoint(
+            x: screenWidth/2 + user.punch_fist.size.width/2 + offset,
             y: screenHeight/2 - user.punch_fist.size.height/2)
-        
+        user.setFistsPos(left, right_pos: right)
         addChild(user.block_fist)
         addChild(user.punch_fist)
         
@@ -214,8 +214,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func setupPhysics() {
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
+        self.physicsWorld.addJoint(user.panchor!)
+        self.physicsWorld.addJoint(user.banchor!)
+//        self.physicsWorld.addJoint(user.manchor!)
+        
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
         self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+        
     }
     
     func updateLabels() {
