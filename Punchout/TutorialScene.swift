@@ -46,7 +46,19 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         if (touchedNode.name == "punch") {
             user.punch_fist.punch(self)
         } else if (touchedNode.name == "block") {
-            user.block_fist.block(self)
+            if (tutorialPosition == 3) {
+                user.block(self)
+                // Timing based blocking
+                if (opponent.framesSincePunch < 40) {
+                    opponent.blocked()
+                    textLabel_2.text = "Success!"
+                } else {
+                    textLabel_2.text = "You got punched!"
+                }
+            } else {
+                user.block(self)
+            }
+            
         }
     }
     
@@ -54,6 +66,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         /* Called before each frame is rendered */
         runAnimations()
         if (tutorialPosition == 1) {
+            // only move if it is tilting tutorial
             movePlayer()
         }
     }
@@ -120,15 +133,18 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             addChild(user.block_fist)
             addChild(user.punch_fist)
             
-            motionManager.stopAccelerometerUpdates()
+            motionManager.stopAccelerometerUpdates() // Halt accelerometer
             
-            textLabel_1.text = "Opponent Blocking"
+            // Move Text Label to below the fists
+            textLabel_2.position = CGPointMake(
+                (user.block_fist.position.x + user.punch_fist.position.x) / 2,
+                user.block_fist.position.y - user.block_fist.size.height)
+            
+            textLabel_1.text = "Punch Him!"
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
-            textLabel_1.text = "Opponent Punching"
-            textLabel_2.text = "Tap Block!"
-            
-            textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
+            textLabel_1.text = "Block Him!"
+            textLabel_2.text = ""
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
@@ -248,8 +264,11 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             if(user.punch_fist.lastPunch > 30) {
                 if (!checkBlock()) {
                     user.score += 3
+                    if (tutorialPosition == 2) {
+                        textLabel_2.text = "Success!"
+                    }
                 } else {
-                    opponent.score += 1
+                    textLabel_2.text = "He blocked it!"
                 }
                 
                 user.punch_fist.lastPunch = 0
