@@ -10,5 +10,4 @@ struct CollisionCategories{
     static let EdgeBody: UInt32 = 0x1 << 0
     static let Opponent : UInt32 = 0x1 << 1
     static let Punch: UInt32 = 0x1 << 2
-    static let Block: UInt32 = 0x1 << 3
 }

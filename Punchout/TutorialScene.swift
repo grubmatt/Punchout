@@ -9,7 +9,6 @@
 import SpriteKit
 import CoreMotion
 
-
 class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     
@@ -33,23 +32,14 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         setupPlayer()
         setupOpponent()
         setupPhysics()
-        updateLabelForPunchScene()
     }
-    
-    func updateLabelForPunchScene() {
-        if (tutorialPosition == 3) {
-            if (opponent.framesSincePunch > 40) {
-                textLabel_2.text = "He punched you!"
-            }
-        }
-    }
+
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let touch = touches.first! as UITouch
         let touchLocation = touch.locationInNode(self)
         let touchedNode = self.nodeAtPoint(touchLocation)
         if touchedNode.name == "next" {
-            tutorialPosition += 1
             next()
         }
         if (touchedNode.name == "punch") {
@@ -118,8 +108,36 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+//    func sendOpponentPunch(){
+//        // Should the opponent punch
+//        if(opponent.shouldPunch()){
+//            let sendPunch = SKAction.runBlock(){
+//                self.opponent.sendPunch(self)
+//            }
+//            let waitToSendPunch = SKAction.waitForDuration(1.5)
+//            let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
+//            runAction(opponentPunch)
+//            opponent.framesSincePunch = 0
+//        }
+//        opponent.framesSincePunch += 1
+//    }
+    
+//    func sendOpponentBlock() {
+//        // Should the opponent block
+//        if (Int(arc4random_uniform(25)) == 1) {
+//            let sendBlock = SKAction.runBlock(){
+//                self.opponent.sendBlock(self)
+//            }
+//            let waitToSendBlock = SKAction.waitForDuration(3)
+//            let opponentBlock = SKAction.sequence([sendBlock, waitToSendBlock])
+//            runAction(opponentBlock)
+//        }
+//    }
+    
     func next() {
         /* Transitions through each part of the game giving brief overview*/
+        
+        tutorialPosition += 1
         
         if (tutorialPosition == 1) {
             setupAccelerometer()
@@ -151,12 +169,14 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             textLabel_1.text = "Punch Him!"
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
+
             textLabel_1.text = "Block Him!"
             textLabel_2.text = ""
+            
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
-            let transitionType = SKTransition.flipHorizontalWithDuration(1.0)
+            let transitionType = SKTransition.pushWithDirection(SKTransitionDirection.Left, duration: 0.75)
             view?.presentScene(menuScene,transition: transitionType)
         }
     }
@@ -179,7 +199,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         user.block_fist.position.y = move.2
         user.punch_fist.position.y = move.2
     }
-
+    
     func setupLabels() {
         textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
         name = "textLabel_1"
