@@ -33,6 +33,15 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         setupPlayer()
         setupOpponent()
         setupPhysics()
+        updateLabelForPunchScene()
+    }
+    
+    func updateLabelForPunchScene() {
+        if (tutorialPosition == 3) {
+            if (opponent.framesSincePunch > 40) {
+                textLabel_2.text = "He punched you!"
+            }
+        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -46,8 +55,8 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         if (touchedNode.name == "punch") {
             user.punch_fist.punch(self)
         } else if (touchedNode.name == "block") {
+            user.block(self)
             if (tutorialPosition == 3) {
-                user.block(self)
                 // Timing based blocking
                 if (opponent.framesSincePunch < 40) {
                     opponent.blocked()
@@ -55,10 +64,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
                 } else {
                     textLabel_2.text = "You got punched!"
                 }
-            } else {
-                user.block(self)
             }
-            
         }
     }
     
@@ -94,6 +100,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
             runAction(opponentPunch)
             opponent.framesSincePunch = 0
+            // if didn't touch block button, update label
         }
         opponent.framesSincePunch += 1
     }
@@ -107,6 +114,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             let waitToSendBlock = SKAction.waitForDuration(3)
             let opponentBlock = SKAction.sequence([sendBlock, waitToSendBlock])
             runAction(opponentBlock)
+            
         }
     }
     
