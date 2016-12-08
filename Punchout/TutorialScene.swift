@@ -53,7 +53,22 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         runAnimations()
-        movePlayer()
+        if (tutorialPosition == 1) {
+            movePlayer()
+        }
+    }
+    
+    func checkBlock() -> Bool {
+        // Should the opponent block
+        if(opponent.shouldBlock()){
+            let sendBlock = SKAction.runBlock(){
+                self.opponent.sendBlock(self)
+            }
+            runAction(sendBlock)
+            return true
+        }
+        
+        return false
     }
     
     func sendOpponentPunch(){
@@ -95,6 +110,17 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             addChild(opponent)
             user.block_fist.removeFromParent()
             user.punch_fist.removeFromParent()
+            let newLeft = opponent.position.x - user.block_fist.size.width / 2 - CGFloat(10)
+            let newRight = opponent.position.x + user.punch_fist.size.width / 2 + CGFloat(10)
+            let newY = opponent.position.y - user.punch_fist.size.height * 2
+            
+            let newLeftPos = CGPoint(x: newLeft, y: newY)
+            let newRightPos = CGPoint(x: newRight, y: newY)
+            user.setFistsPos(newLeftPos, right_pos: newRightPos)
+            addChild(user.block_fist)
+            addChild(user.punch_fist)
+            
+            motionManager.stopAccelerometerUpdates()
             
             textLabel_1.text = "Opponent Blocking"
             textLabel_2.text = ""
@@ -204,36 +230,35 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     // MARK: - Implementing SKPhysicsContactDelegate protocol
     func didBeginContact(contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
         
-//        var firstBody: SKPhysicsBody
-//        var secondBody: SKPhysicsBody
-//        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-//            firstBody = contact.bodyA
-//            secondBody = contact.bodyB
-//        } else {
-//            firstBody = contact.bodyB
-//            secondBody = contact.bodyA
-//        }
-//        
-//        // When the punch overlaps with opponent
-//        if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
-//            (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
-//            
-//            // Make sure its been at least 30 frames since last hit
-//            if(user.punch_fist.lastPunch > 30) {
-//                if (!checkBlock()) {
-//                    user.score += 3
-//                } else {
-//                    opponent.score += 1
-//                }
-//                
-//                user.punch_fist.lastPunch = 0
-//            }
-//            
-//            user.punch_fist.lastPunch += 1
-//        }
-//        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
-//            secondBody.velocity = CGVector(dx: 0, dy: 0)
-//        }
+        // When the punch overlaps with opponent
+        if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
+            (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
+            
+            // Make sure its been at least 30 frames since last hit
+            if(user.punch_fist.lastPunch > 30) {
+                if (!checkBlock()) {
+                    user.score += 3
+                } else {
+                    opponent.score += 1
+                }
+                
+                user.punch_fist.lastPunch = 0
+            }
+            
+            user.punch_fist.lastPunch += 1
+        }
+        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
+            secondBody.velocity = CGVector(dx: 0, dy: 0)
+        }
     }
 }
