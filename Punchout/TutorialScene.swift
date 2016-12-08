@@ -33,6 +33,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         setupOpponent()
         setupPhysics()
     }
+
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let touch = touches.first! as UITouch
@@ -44,14 +45,39 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         if (touchedNode.name == "punch") {
             user.punch_fist.punch(self)
         } else if (touchedNode.name == "block") {
-            user.block_fist.block(self)
+            user.block(self)
+            if (tutorialPosition == 3) {
+                // Timing based blocking
+                if (opponent.framesSincePunch < 40) {
+                    opponent.blocked()
+                    textLabel_2.text = "Success!"
+                } else {
+                    textLabel_2.text = "You got punched!"
+                }
+            }
         }
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         runAnimations()
-        movePlayer()
+        if (tutorialPosition == 1) {
+            // only move if it is tilting tutorial
+            movePlayer()
+        }
+    }
+    
+    func checkBlock() -> Bool {
+        // Should the opponent block
+        if(opponent.shouldBlock()){
+            let sendBlock = SKAction.runBlock(){
+                self.opponent.sendBlock(self)
+            }
+            runAction(sendBlock)
+            return true
+        }
+        
+        return false
     }
     
     func sendOpponentPunch(){
@@ -64,19 +90,21 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             let opponentPunch = SKAction.sequence([sendPunch,waitToSendPunch])
             runAction(opponentPunch)
             opponent.framesSincePunch = 0
+            // if didn't touch block button, update label
         }
         opponent.framesSincePunch += 1
     }
     
     func sendOpponentBlock() {
         // Should the opponent block
-        if (Int(arc4random_uniform(25)) == 1) {
+        if (Int(arc4random_uniform(100)) == 1) {
             let sendBlock = SKAction.runBlock(){
                 self.opponent.sendBlock(self)
             }
             let waitToSendBlock = SKAction.waitForDuration(3)
             let opponentBlock = SKAction.sequence([sendBlock, waitToSendBlock])
             runAction(opponentBlock)
+            
         }
     }
     
@@ -95,14 +123,29 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
             addChild(opponent)
             user.block_fist.removeFromParent()
             user.punch_fist.removeFromParent()
+
+            let newLeft = opponent.position.x - user.block_fist.size.width / 2 - CGFloat(10)
+            let newRight = opponent.position.x + user.punch_fist.size.width / 2 + CGFloat(10)
+            let newY = opponent.position.y - user.punch_fist.size.height * 2
             
-            textLabel_1.text = "Opponent Blocking"
+            let newLeftPos = CGPoint(x: newLeft, y: newY)
+            let newRightPos = CGPoint(x: newRight, y: newY)
+            user.setFistsPos(newLeftPos, right_pos: newRightPos)
+            addChild(user.block_fist)
+            addChild(user.punch_fist)
+            
+            motionManager.stopAccelerometerUpdates() // Halt accelerometer
+            
+            // Move Text Label to below the fists
+            textLabel_2.position = CGPointMake(
+                (user.block_fist.position.x + user.punch_fist.position.x) / 2,
+                user.block_fist.position.y - user.block_fist.size.height)
+            
+            textLabel_1.text = "Punch Him!"
             textLabel_2.text = ""
         } else if (tutorialPosition == 3) {
-            textLabel_1.text = "Opponent Punching"
-            textLabel_2.text = "Block This!"
-            
-            textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
+            textLabel_1.text = "Block Him!"
+            textLabel_2.text = ""
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
@@ -204,36 +247,38 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     // MARK: - Implementing SKPhysicsContactDelegate protocol
     func didBeginContact(contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
         
-//        var firstBody: SKPhysicsBody
-//        var secondBody: SKPhysicsBody
-//        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-//            firstBody = contact.bodyA
-//            secondBody = contact.bodyB
-//        } else {
-//            firstBody = contact.bodyB
-//            secondBody = contact.bodyA
-//        }
-//        
-//        // When the punch overlaps with opponent
-//        if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
-//            (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
-//            
-//            // Make sure its been at least 30 frames since last hit
-//            if(user.punch_fist.lastPunch > 30) {
-//                if (!checkBlock()) {
-//                    user.score += 3
-//                } else {
-//                    opponent.score += 1
-//                }
-//                
-//                user.punch_fist.lastPunch = 0
-//            }
-//            
-//            user.punch_fist.lastPunch += 1
-//        }
-//        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
-//            secondBody.velocity = CGVector(dx: 0, dy: 0)
-//        }
+        // When the punch overlaps with opponent
+        if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
+            (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
+            
+            // Make sure its been at least 30 frames since last hit
+            if(user.punch_fist.lastPunch > 30) {
+                if (!checkBlock()) {
+                    user.score += 3
+                    if (tutorialPosition == 2) {
+                        textLabel_2.text = "Success!"
+                    }
+                } else {
+                    textLabel_2.text = "He blocked it!"
+                }
+                
+                user.punch_fist.lastPunch = 0
+            }
+            
+            user.punch_fist.lastPunch += 1
+        }
+        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
+            secondBody.velocity = CGVector(dx: 0, dy: 0)
+        }
     }
 }
