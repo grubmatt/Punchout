@@ -10,7 +10,7 @@ import SpriteKit
 import CoreMotion
 
 
-class TutorialScene: SKScene{
+class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     
     let motionManager: CMMotionManager = CMMotionManager()
@@ -32,7 +32,7 @@ class TutorialScene: SKScene{
         setupLabels()
         setupPlayer()
         setupOpponent()
-        
+        setupPhysics()
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -113,7 +113,6 @@ class TutorialScene: SKScene{
     
     func runAnimations() {
         if (tutorialPosition == 2) {
-//            self.opponent.sendBlock(self)
             sendOpponentBlock()
         } else if (tutorialPosition == 3) {
             sendOpponentPunch()
@@ -161,12 +160,18 @@ class TutorialScene: SKScene{
         
         user.setFistsPos(left, right_pos: right)
         
-        user.block_fist.physicsBody?.dynamic = false
-        user.punch_fist.physicsBody?.dynamic = false
-        
-        
         addChild(user.block_fist)
         addChild(user.punch_fist)
+    }
+    
+    func setupPhysics() {
+        self.physicsWorld.gravity = CGVectorMake(0, 0)
+        self.physicsWorld.contactDelegate = self
+        self.physicsWorld.addJoint(user.pbanchor!)
+        
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: frame)
+        self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+        
     }
     
     func setupOpponent(){
@@ -194,5 +199,41 @@ class TutorialScene: SKScene{
     override func didSimulatePhysics() {
         user.xSpeed = accelerationX*30
         user.ySpeed = accelerationY*60
+    }
+    
+    
+    // MARK: - Implementing SKPhysicsContactDelegate protocol
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+//        var firstBody: SKPhysicsBody
+//        var secondBody: SKPhysicsBody
+//        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+//            firstBody = contact.bodyA
+//            secondBody = contact.bodyB
+//        } else {
+//            firstBody = contact.bodyB
+//            secondBody = contact.bodyA
+//        }
+//        
+//        // When the punch overlaps with opponent
+//        if ((firstBody.categoryBitMask & CollisionCategories.Opponent != 0) &&
+//            (secondBody.categoryBitMask & CollisionCategories.Punch != 0)) {
+//            
+//            // Make sure its been at least 30 frames since last hit
+//            if(user.punch_fist.lastPunch > 30) {
+//                if (!checkBlock()) {
+//                    user.score += 3
+//                } else {
+//                    opponent.score += 1
+//                }
+//                
+//                user.punch_fist.lastPunch = 0
+//            }
+//            
+//            user.punch_fist.lastPunch += 1
+//        }
+//        if ((firstBody.categoryBitMask & CollisionCategories.EdgeBody != 0)) {
+//            secondBody.velocity = CGVector(dx: 0, dy: 0)
+//        }
     }
 }
