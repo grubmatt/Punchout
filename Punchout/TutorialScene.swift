@@ -66,6 +66,8 @@ class TutorialScene: SKScene{
         } else if (tutorialPosition == 3) {
             textLabel_1.text = "Opponent Punching"
             textLabel_2.text = "Block this!"
+            
+            textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
         } else if (tutorialPosition == 4) {
             let menuScene = StartGameScene(size: size)
             menuScene.scaleMode = scaleMode
@@ -83,11 +85,11 @@ class TutorialScene: SKScene{
     }
 
     func setupLabels() {
-        textLabel_1.position = CGPointMake(size.width/3, size.height/4)
+        textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
         name = "textLabel_1"
         textLabel_1.text = "Block"
         
-        textLabel_2.position = CGPointMake(2/3*size.width, size.height/4)
+        textLabel_2.position = CGPointMake(2/3*size.width, screenHeight/2 - user.punch_fist.size.height)
         textLabel_2.text = "Punch"
         
         let nextButton = SKLabelNode()
@@ -103,11 +105,11 @@ class TutorialScene: SKScene{
     func setupPlayer() {
         user.block_fist.position = CGPoint(
             x: screenWidth/2 - user.block_fist.size.width,
-            y: textLabel_1.position.y + 1.2 * user.block_fist.size.height)
+            y: screenHeight/2)
         
         user.punch_fist.position = CGPoint(
             x: screenWidth/2 + user.punch_fist.size.width,
-            y: textLabel_2.position.y + 1.2 * user.punch_fist.size.height)
+            y: screenHeight/2)
         
         user.block_fist.physicsBody?.dynamic = false
         user.punch_fist.physicsBody?.dynamic = false
@@ -122,5 +124,4 @@ class TutorialScene: SKScene{
         
         opponent.physicsBody?.dynamic = false
     }
-    
 }
