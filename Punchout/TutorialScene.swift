@@ -9,8 +9,8 @@
 import SpriteKit
 import CoreMotion
 
+// MARK: - Tutorial Scene
 class TutorialScene: SKScene, SKPhysicsContactDelegate{
-    
     
     let motionManager: CMMotionManager = CMMotionManager()
     var accelerationX: CGFloat = 0.0
@@ -67,6 +67,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    // MARK: - Opponent Logic
     func checkBlock() -> Bool {
         // Should the opponent block
         if(opponent.shouldBlock()){
@@ -108,6 +109,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    // MARK: - State Change Methods
     func next() {
         /* Transitions through each part of the game giving brief overview*/
         
@@ -173,6 +175,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
         user.punch_fist.position.y = move.2
     }
     
+    // MARK: - Setup Methods
     func setupLabels() {
         textLabel_1.position = CGPointMake(size.width/3, screenHeight/2 - user.block_fist.size.height)
         name = "textLabel_1"

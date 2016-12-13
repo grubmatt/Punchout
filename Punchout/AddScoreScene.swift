@@ -9,13 +9,14 @@
 import SpriteKit
 import UIKit
 
+// MARK: - Add Score Screen
+// Screen that is displayed to user when they enter their high score
 class AddScoreScene: SKScene, UITextViewDelegate {
     
     var userScore: Int32 = 0
     var opponentScore: Int32 = 0
     
     var highScoreText = UITextView()
-    
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
@@ -64,6 +65,7 @@ class AddScoreScene: SKScene, UITextViewDelegate {
         }
     }
     
+    //Ensures keyboard closes when user hits return
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
             textView.resignFirstResponder()

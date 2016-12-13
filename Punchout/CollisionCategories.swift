@@ -6,6 +6,7 @@
 //  Copyright © 2016 Larry Heimann. All rights reserved.
 //
 
+// MARK: - Collision Categories
 struct CollisionCategories{
     static let EdgeBody: UInt32 = 0x1 << 0
     static let Opponent : UInt32 = 0x1 << 1

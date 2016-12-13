@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+// MARK: - High Score Scene
 class HighScoreScene: SKScene {
     
     var highScore: Score = Score()

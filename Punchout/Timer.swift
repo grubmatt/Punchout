@@ -8,8 +8,9 @@
 
 import SpriteKit
 
+// MARK: - Timer Class
+// Keeps track of game time
 class Timer: SKLabelNode {
-    // Keeps track of game time
     
     var endTime:NSDate!
     

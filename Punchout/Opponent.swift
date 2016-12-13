@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+// MARK: - Opponent Class
 class Opponent : SKSpriteNode {
     
     var score: Int32 = 0
@@ -38,6 +39,7 @@ class Opponent : SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
+    // MARK: - Animation Methods
     func animate(){
         // Makes opponent appear to be moving
         
@@ -77,6 +79,7 @@ class Opponent : SKSpriteNode {
         self.runAction(opponentAnimation)
     }
     
+    // MARK: - Opponent Logic
     func shouldPunch() -> Bool {
         // Sliding chance that opponent will send a punch
         // More time = more likely to punch

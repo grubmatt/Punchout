@@ -9,8 +9,9 @@
 import Foundation
 import CoreData
 
+// MARK: - Score Class
+// Keeps track of the highscore
 public class Score: NSObject {
-    // Keeps track of the highscore
     
     var name: String
     var userScore: Int32

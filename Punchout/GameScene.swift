@@ -1,9 +1,9 @@
 //
 //  GameScene.swift
-//  SDStarter
+//  Punchout
 //
-//  Created by Larry Heimann on 11/14/16.
-//  Copyright (c) 2016 Larry Heimann. All rights reserved.
+//  Created by Matt Gruber on 11/30/16.
+//  Copyright © 2016 CMU. All rights reserved.
 //
 
 import SpriteKit
@@ -12,6 +12,7 @@ import CoreMotion
 let screenWidth = UIScreen.mainScreen().bounds.width
 let screenHeight = UIScreen.mainScreen().bounds.height
 
+// MARK: - Game Scene
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let user: Player = Player()
@@ -218,6 +219,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         opponentScore.text = "Mike: " + String(opponent.score)
     }
     
+    // MARK: - Segue Method
     func transitionToGameOver() {
         var userWin = true
         if (user.score <= opponent.score) {

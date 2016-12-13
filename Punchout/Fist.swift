@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 
+// MARK: Fist Class 
 class Fist: SKSpriteNode {
     
     var canMove: Bool
@@ -49,6 +50,7 @@ class Fist: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Animation Methods
     func punch(scene: SKScene) {
         // move fist left and up
 
@@ -56,8 +58,7 @@ class Fist: SKSpriteNode {
         let moveY = self.size.height * 2.5
         moveHelper(scene, dx: moveX, dy: moveY)
     }
-    
-    
+
     func block(scene: SKScene) {
         // move fist up
 

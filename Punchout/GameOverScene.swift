@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+// MARK: - Game Over Screen
 class GameOverScene: SKScene {
     
     var userWin: Bool = true
@@ -27,6 +28,14 @@ class GameOverScene: SKScene {
             color = UIColor.greenColor()
             position = CGPointMake(size.width/2,size.height-size.height/8)
             imageName = "mike_down"
+            
+            let points = SKLabelNode()
+            points.position = CGPointMake(size.width/2,size.height-size.height/4)
+            points.text = String(userScore) + " points!"
+            points.fontColor = color
+            points.fontSize = 45
+            addChild(points)
+            
         } else {
             introText = "You lost..."
             color = UIColor.redColor()
@@ -40,15 +49,6 @@ class GameOverScene: SKScene {
         introToMessage.fontColor = color
         introToMessage.fontSize = 45
         addChild(introToMessage)
-        
-        if (userWin) {
-            let points = SKLabelNode()
-            points.position = CGPointMake(size.width/2,size.height-size.height/4)
-            points.text = String(userScore) + " points!"
-            points.fontColor = color
-            points.fontSize = 45
-            addChild(points)
-        }
         
         let arena = SKSpriteNode(imageNamed: "boxing_ring_412x512")
         arena.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)

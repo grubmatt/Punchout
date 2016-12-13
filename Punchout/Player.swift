@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 
+// MARK: - Player Class
 class Player: SKNode {
     let block_fist : Fist
     let punch_fist : Fist
@@ -31,6 +32,23 @@ class Player: SKNode {
         super.init()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Positioning Methods
+    private func getMiddlePoint(p1 : CGPoint, p2: CGPoint) -> CGPoint {
+        // Finds midpoint between gloves
+        
+        let lx = p1.x
+        let rx = p2.x
+        
+        let ly = p1.y
+        let ry = p1.y
+        
+        return CGPoint(x: (lx+rx)/2 , y: (ly+ry)/2)
+    }
+    
     func setFistsPos(left_pos : CGPoint, right_pos : CGPoint) {
         // Sets intial fist position
         
@@ -48,22 +66,7 @@ class Player: SKNode {
             axis: pbVector)
         pbanchor?.shouldEnableLimits = false
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func getMiddlePoint(p1 : CGPoint, p2: CGPoint) -> CGPoint {
-        // Finds midpoint between gloves
-        
-        let lx = p1.x
-        let rx = p2.x
-        
-        let ly = p1.y
-        let ry = p1.y
-        
-        return CGPoint(x: (lx+rx)/2 , y: (ly+ry)/2)
-    }
+
     
     func punch(scene : SKScene) {
         self.punch_fist.punch(scene)

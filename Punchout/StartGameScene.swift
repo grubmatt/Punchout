@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 
+// MARK: - Start Game Scene
+// Main Menu for the game
 class StartGameScene: SKScene {
     
     let dm = DataManager()

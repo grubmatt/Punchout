@@ -17,10 +17,12 @@ class GameViewController: UIViewController {
         let scene = StartGameScene(size: view.bounds.size)
         let skView = view as! SKView
         
-        // Uncomment for testing
+        // For testing puposes
         //skView.showsFPS = true
         //skView.showsNodeCount = true
         //scene.scaleMode = .ResizeFill
+        
+        
         skView.presentScene(scene)
     }
     
