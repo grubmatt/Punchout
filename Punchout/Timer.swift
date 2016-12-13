@@ -9,6 +9,7 @@
 import SpriteKit
 
 class Timer: SKLabelNode {
+    // Keeps track of game time
     
     var endTime:NSDate!
     
@@ -18,11 +19,10 @@ class Timer: SKLabelNode {
     }
     
     func timeLeft() -> NSTimeInterval {
-        
         let now = NSDate()
         let remainingSeconds = endTime.timeIntervalSinceDate(now)
-        return max(remainingSeconds, 0)
         
+        return max(remainingSeconds, 0)
     }
     
     func startWithDuration(duration: NSTimeInterval) {

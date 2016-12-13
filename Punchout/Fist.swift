@@ -17,21 +17,16 @@ class Fist: SKSpriteNode {
     init(fisttype : String) {
         let texture : SKTexture?
         canMove = true
-        if (fisttype == "left") {
-            texture = SKTexture(imageNamed: "block")
-        } else {
+        
+        if (fisttype == "right") {
             texture = SKTexture(imageNamed: "punch")
+        } else {
+            texture = SKTexture(imageNamed: "block")
         }
         
-        // texture size is creating a problem by overlapping the other fist
-        super.init(texture: texture!,
-                   color: SKColor.whiteColor(),
-                   size: texture!.size())
+        super.init(texture: texture!, color: SKColor.whiteColor(), size: texture!.size())
         
-        
-        // preparing player for collisions once we add physics...
-        
-        if (fisttype != "left") {
+        if (fisttype == "right") {
             self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
             self.physicsBody?.dynamic = true
             self.physicsBody?.usesPreciseCollisionDetection = true
@@ -48,37 +43,30 @@ class Fist: SKSpriteNode {
             self.physicsBody?.affectedByGravity = false
             self.physicsBody?.allowsRotation = false
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // move fist left and up
     func punch(scene: SKScene) {
+        // move fist left and up
+
         let moveX = (-self.size.width/2)
         let moveY = self.size.height * 2.5
-        actionHelper(scene, dx: moveX, dy: moveY)
+        moveHelper(scene, dx: moveX, dy: moveY)
     }
     
     
-    // move fist up
     func block(scene: SKScene) {
+        // move fist up
+
         let moveX = CGFloat(0.0)
         let moveY = self.size.height
-        actionHelper(scene, dx: moveX, dy: moveY)
+        moveHelper(scene, dx: moveX, dy: moveY)
     }
     
-    func move(scene: SKScene, dx : CGFloat, dy : CGFloat){
-        let moveFistAction = SKAction.moveTo(
-            CGPoint(x: self.position.x + dx, y:self.position.y + dy),
-            duration: 0.2)
-        
-        self.runAction(SKAction.sequence([moveFistAction]))
-    }
-    
-    private func actionHelper(scene: SKScene, dx : CGFloat, dy : CGFloat){
+    private func moveHelper(scene: SKScene, dx : CGFloat, dy : CGFloat){
         if (canMove) {
             // set canMove to false
             canMove = false
@@ -89,12 +77,11 @@ class Fist: SKSpriteNode {
                 duration: 0.2)
             
             // remove that action
-            //            let removeFistAction = SKAction.removeFromParent()
             let returnFistAction = SKAction.moveTo(
                 CGPoint(x: self.position.x, y: self.position.y),
                 duration: 0.2)
             
-            // animation
+            // run the animation
             self.runAction(SKAction.sequence([moveFistAction, returnFistAction]))
             
             // delay to prevent spamming a move
@@ -102,10 +89,6 @@ class Fist: SKSpriteNode {
             runAction(waitToEnableFire,completion:{
                 self.canMove = true
             })
-        } else {
-            print("Don't spam!")
         }
     }
-    
-    
 }

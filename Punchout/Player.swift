@@ -1,5 +1,5 @@
 //
-//  player.swift
+//  Player.swift
 //  Punchout
 //
 //  Created by Brucey on 12/1/16.
@@ -32,6 +32,8 @@ class Player: SKNode {
     }
     
     func setFistsPos(left_pos : CGPoint, right_pos : CGPoint) {
+        // Sets intial fist position
+        
         block_fist.position = left_pos
         punch_fist.position = right_pos
         
@@ -52,6 +54,8 @@ class Player: SKNode {
     }
     
     private func getMiddlePoint(p1 : CGPoint, p2: CGPoint) -> CGPoint {
+        // Finds midpoint between gloves
+        
         let lx = p1.x
         let rx = p2.x
         
@@ -68,11 +72,6 @@ class Player: SKNode {
     
     func block(scene : SKScene) {
         self.block_fist.block(scene)
-    }
-    
-    func setFistBodyPhysics(dx : CGFloat, dy : CGFloat) {
-        punch_fist.physicsBody?.velocity = CGVector(dx: dx, dy: dy)
-        block_fist.physicsBody?.velocity = CGVector(dx: dx, dy: dy)
     }
     
     func moveFists(scene : SKScene,
@@ -104,6 +103,4 @@ class Player: SKNode {
             
             return (newBX, newPX, newY)
     }
-    
-    
 }

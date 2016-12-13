@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 
 public class Score: NSObject {
+    // Keeps track of the highscore
     
     var name: String
     var userScore: Int32

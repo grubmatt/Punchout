@@ -14,7 +14,7 @@ let screenHeight = UIScreen.mainScreen().bounds.height
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    let user: player = player()
+    let user: Player = Player()
     let opponent: Opponent = Opponent()
     let timer: Timer = Timer()
     

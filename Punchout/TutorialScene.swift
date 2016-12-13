@@ -22,7 +22,7 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     let textLabel_1 = SKLabelNode()
     let textLabel_2 = SKLabelNode()
     
-    let user: player = player()
+    let user: Player = Player()
     let opponent: Opponent = Opponent()
     
     override func didMoveToView(view: SKView) {

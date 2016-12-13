@@ -35,11 +35,12 @@ class Opponent : SKSpriteNode {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        // SKSpriteNode conforms to NSCoding, which requires we implement this, but we can just call super.init()
         super.init(coder: aDecoder)
     }
     
     func animate(){
+        // Makes opponent appear to be moving
+        
         var opponentTextures:[SKTexture] = []
         for i in 0...1 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
@@ -50,6 +51,8 @@ class Opponent : SKSpriteNode {
     }
     
     func sendPunch(scene: SKScene){
+        // Animates opponent punch
+        
         var opponentTextures:[SKTexture] = []
         for i in 2...3 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
@@ -58,13 +61,15 @@ class Opponent : SKSpriteNode {
         let opponentAnimation = SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.3)
         self.runAction(opponentAnimation)
         
-        // Assume hit and add points
+        // Assume that opponent hit and preemptively add points
         score += 3
         
         framesSincePunch = 0
     }
     
     func sendBlock(scene: SKScene){
+        // Animates opponent block
+        
         var opponentTextures:[SKTexture] = []
         opponentTextures.append(SKTexture(imageNamed: "opponent_block"))
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
@@ -74,7 +79,8 @@ class Opponent : SKSpriteNode {
     
     func shouldPunch() -> Bool {
         // Sliding chance that opponent will send a punch
-        // The more time = more likely to punch
+        // More time = more likely to punch
+        
         let slide = UInt32(60 - Int(framesSincePunch)/6)
         if(framesSincePunch > 30) {
             if (Int(arc4random_uniform(slide)) == 1) {
@@ -86,7 +92,7 @@ class Opponent : SKSpriteNode {
     }
     
     func shouldBlock() -> Bool {
-        // 1 in 3 chance that opponent will send a block
+        // Random chance that opponent will send a block
         if (Int(arc4random_uniform(3)) == 1) {
             return true
         } else {
@@ -110,7 +116,7 @@ class Opponent : SKSpriteNode {
             changeDirection = true
         }
         
-        // 1 in 10 chance that opponent will switch direction
+        // Random chance that opponent will switch direction horizontally
         var randomChance = Int(arc4random_uniform(11))
         if( randomChance == 1) {
             changeDirection = true
@@ -129,7 +135,7 @@ class Opponent : SKSpriteNode {
             changeDirection = true
         }
         
-        // 1 in 6 chance that opponent will switch direction
+        // Random chance that opponent will switch direction vertically
         randomChance = Int(arc4random_uniform(11))
         if( randomChance == 1) {
             changeDirection = true
