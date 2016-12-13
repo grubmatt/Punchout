@@ -1,5 +1,5 @@
 //
-//  fist.swift
+//  Fist.swift
 //  Punchout
 //
 //  Created by Brucey on 11/30/16.
@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class fist: SKSpriteNode {
+class Fist: SKSpriteNode {
     
     var canMove: Bool
     var lastPunch = 0
@@ -89,7 +89,7 @@ class fist: SKSpriteNode {
                 duration: 0.2)
             
             // remove that action
-//            let removeFistAction = SKAction.removeFromParent()
+            //            let removeFistAction = SKAction.removeFromParent()
             let returnFistAction = SKAction.moveTo(
                 CGPoint(x: self.position.x, y: self.position.y),
                 duration: 0.2)

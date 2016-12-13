@@ -9,9 +9,9 @@
 import UIKit
 import SpriteKit
 
-class player: SKNode {
-    let block_fist : fist
-    let punch_fist : fist
+class Player: SKNode {
+    let block_fist : Fist
+    let punch_fist : Fist
     var score: Int32 = 0
     var pbanchor: SKPhysicsJointSliding?
     var manchor: SKPhysicsJointLimit?
@@ -20,10 +20,10 @@ class player: SKNode {
     var ySpeed : CGFloat = 0
     
     override init() {
-        block_fist = fist(fisttype: "left")
+        block_fist = Fist(fisttype: "left")
         block_fist.name = "block"
         
-        punch_fist = fist(fisttype: "right")
+        punch_fist = Fist(fisttype: "right")
         punch_fist.name = "punch"
         
         score = 0
@@ -78,31 +78,31 @@ class player: SKNode {
     func moveFists(scene : SKScene,
                    leftBound : CGFloat, rightBound: CGFloat,
                    upBound : CGFloat, lowBound : CGFloat, bx: CGFloat, px: CGFloat, y: CGFloat) ->
-                    (CGFloat, CGFloat, CGFloat) {
-        
-        var newPX = px + xSpeed
-        var newBX = bx + xSpeed
-        
-        // forces opponent to switch direction if it hits the edge
-        while(newPX > rightBound) {
-            newPX -= 2
-            newBX -= 2
-        }
-        while(newBX < leftBound){
-            newPX += 2
-            newBX += 2
-        }
-        
-        var newY = y + ySpeed
-                        
-        while(newY > upBound) {
-            newY -= 2
-        }
-        while(newY < lowBound){
-            newY += 2
-        }
-        
-        return (newBX, newPX, newY)
+        (CGFloat, CGFloat, CGFloat) {
+            
+            var newPX = px + xSpeed
+            var newBX = bx + xSpeed
+            
+            // forces opponent to switch direction if it hits the edge
+            while(newPX > rightBound) {
+                newPX -= 2
+                newBX -= 2
+            }
+            while(newBX < leftBound){
+                newPX += 2
+                newBX += 2
+            }
+            
+            var newY = y + ySpeed
+            
+            while(newY > upBound) {
+                newY -= 2
+            }
+            while(newY < lowBound){
+                newY += 2
+            }
+            
+            return (newBX, newPX, newY)
     }
     
     
