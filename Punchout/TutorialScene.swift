@@ -27,7 +27,6 @@ class TutorialScene: SKScene, SKPhysicsContactDelegate{
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.blackColor()
-        
         setupLabels()
         setupPlayer()
         setupOpponent()

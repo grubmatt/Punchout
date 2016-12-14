@@ -15,10 +15,10 @@
 		015EA5401DEFA83B00710A8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 015EA53F1DEFA83B00710A8D /* Assets.xcassets */; };
 		015EA5431DEFA83B00710A8D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 015EA5411DEFA83B00710A8D /* LaunchScreen.storyboard */; };
 		015EA56A1DEFB30200710A8D /* StartGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015EA5691DEFB30200710A8D /* StartGameScene.swift */; };
+		01707C2D1E01609900EA6EDD /* GameSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01707C2C1E01609900EA6EDD /* GameSceneTests.swift */; };
 		01DB7B091E010186000AE10E /* FistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DB7B081E010186000AE10E /* FistTests.swift */; };
 		01DB7B0B1E010ED0000AE10E /* OpponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DB7B0A1E010ED0000AE10E /* OpponentTests.swift */; };
 		01DB7B101E011781000AE10E /* PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DB7B0F1E011781000AE10E /* PlayerTests.swift */; };
-		01DB7B121E011BC6000AE10E /* GameSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DB7B111E011BC6000AE10E /* GameSceneTests.swift */; };
 		01DB7B141E011BF8000AE10E /* TutorialSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DB7B131E011BF8000AE10E /* TutorialSceneTests.swift */; };
 		682215B31DEFD12C00EE3186 /* CollisionCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682215B21DEFD12C00EE3186 /* CollisionCategories.swift */; };
 		687ED6551DF91D5900578F7A /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687ED6541DF91D5900578F7A /* Score.swift */; };
@@ -65,10 +65,10 @@
 		015EA5541DEFA83C00710A8D /* PunchoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PunchoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		015EA55A1DEFA83C00710A8D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		015EA5691DEFB30200710A8D /* StartGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartGameScene.swift; sourceTree = "<group>"; };
+		01707C2C1E01609900EA6EDD /* GameSceneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneTests.swift; sourceTree = "<group>"; };
 		01DB7B081E010186000AE10E /* FistTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FistTests.swift; sourceTree = "<group>"; };
 		01DB7B0A1E010ED0000AE10E /* OpponentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpponentTests.swift; sourceTree = "<group>"; };
 		01DB7B0F1E011781000AE10E /* PlayerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTests.swift; sourceTree = "<group>"; };
-		01DB7B111E011BC6000AE10E /* GameSceneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneTests.swift; sourceTree = "<group>"; };
 		01DB7B131E011BF8000AE10E /* TutorialSceneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialSceneTests.swift; sourceTree = "<group>"; };
 		682215B21DEFD12C00EE3186 /* CollisionCategories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollisionCategories.swift; sourceTree = "<group>"; };
 		687ED6541DF91D5900578F7A /* Score.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
@@ -147,8 +147,8 @@
 		015EA54C1DEFA83B00710A8D /* PunchoutTests */ = {
 			isa = PBXGroup;
 			children = (
+				01707C2C1E01609900EA6EDD /* GameSceneTests.swift */,
 				01DB7B131E011BF8000AE10E /* TutorialSceneTests.swift */,
-				01DB7B111E011BC6000AE10E /* GameSceneTests.swift */,
 				01DB7B0F1E011781000AE10E /* PlayerTests.swift */,
 				01DB7B0A1E010ED0000AE10E /* OpponentTests.swift */,
 				01DB7B081E010186000AE10E /* FistTests.swift */,
@@ -355,7 +355,7 @@
 			files = (
 				01DB7B0B1E010ED0000AE10E /* OpponentTests.swift in Sources */,
 				01DB7B101E011781000AE10E /* PlayerTests.swift in Sources */,
-				01DB7B121E011BC6000AE10E /* GameSceneTests.swift in Sources */,
+				01707C2D1E01609900EA6EDD /* GameSceneTests.swift in Sources */,
 				01DB7B141E011BF8000AE10E /* TutorialSceneTests.swift in Sources */,
 				01DB7B091E010186000AE10E /* FistTests.swift in Sources */,
 			);

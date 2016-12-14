@@ -2,7 +2,7 @@
 //  PlayerTests.swift
 //  Punchout
 //
-//  Created by Brucey on 12/14/16.
+//  Created by Brucey on 12/10/16.
 //  Copyright © 2016 CMU. All rights reserved.
 //
 import XCTest
