@@ -15,7 +15,7 @@ class Player: SKNode {
     let punch_fist : Fist
     var score: Int32 = 0
     var pbanchor: SKPhysicsJointSliding?
-    var manchor: SKPhysicsJointLimit?
+
     
     var xSpeed : CGFloat = 0
     var ySpeed : CGFloat = 0
@@ -67,14 +67,22 @@ class Player: SKNode {
         pbanchor?.shouldEnableLimits = false
     }
 
+    // MARK: - Action method
     
+    // Disables movement block fist to prevent spamming
+    // Calls the punch function of punch fist
     func punch(scene : SKScene) {
+        block_fist.canMove = false
         self.punch_fist.punch(scene)
+        block_fist.canMove = true
     }
     
-    
+    // Disables movement punch fist to prevent spamming
+    // Calls the block function of block fist
     func block(scene : SKScene) {
+        punch_fist.canMove = false
         self.block_fist.block(scene)
+        punch_fist.canMove = true
     }
     
     func moveFists(scene : SKScene,

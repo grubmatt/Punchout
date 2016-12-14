@@ -12,23 +12,31 @@ import SpriteKit
 // MARK: Fist Class 
 class Fist: SKSpriteNode {
     
-    var canMove: Bool
-    var lastPunch = 0
+    var canMove: Bool // Determines whether the fist is allowed to move
+    var lastPunch = 0 // The frame that goes by since the last frame
     
     init(fisttype : String) {
         let texture : SKTexture?
         canMove = true
         
+        // Initializes the image frame
         if (fisttype == "right") {
             texture = SKTexture(imageNamed: "punch")
         } else {
             texture = SKTexture(imageNamed: "block")
         }
         
-        super.init(texture: texture!, color: SKColor.whiteColor(), size: texture!.size())
+        super.init(texture: texture!,
+                   color: SKColor.whiteColor(),
+                   size: texture!.size())
         
+        // Adding physics (collision category to the body)
+        // Gravity and rotation is disabled to prevent
+        // excessive y-axis movement
+        // and undesired behavior of fist rotation in accelerometer
         if (fisttype == "right") {
-            self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+            self.physicsBody = SKPhysicsBody(texture: self.texture!,
+                                             size: self.size)
             self.physicsBody?.dynamic = true
             self.physicsBody?.usesPreciseCollisionDetection = true
             self.physicsBody?.categoryBitMask = CollisionCategories.Punch
@@ -37,7 +45,8 @@ class Fist: SKSpriteNode {
             self.physicsBody?.affectedByGravity = false
             self.physicsBody?.allowsRotation = false
         } else {
-            self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+            self.physicsBody = SKPhysicsBody(texture: self.texture!,
+                                             size: self.size)
             self.physicsBody?.dynamic = true
             self.physicsBody?.usesPreciseCollisionDetection = true
             self.physicsBody?.collisionBitMask = 0x0
@@ -51,22 +60,23 @@ class Fist: SKSpriteNode {
     }
     
     // MARK: Animation Methods
+    // move fist left and up
     func punch(scene: SKScene) {
-        // move fist left and up
-
+        
         let moveX = (-self.size.width/2)
         let moveY = self.size.height * 2.5
         moveHelper(scene, dx: moveX, dy: moveY)
     }
-
+    
+    // move fist up
     func block(scene: SKScene) {
-        // move fist up
-
+        
         let moveX = CGFloat(0.0)
         let moveY = self.size.height
         moveHelper(scene, dx: moveX, dy: moveY)
     }
     
+    // Helper function that help with movement
     private func moveHelper(scene: SKScene, dx : CGFloat, dy : CGFloat){
         if (canMove) {
             // set canMove to false

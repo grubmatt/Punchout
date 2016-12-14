@@ -37,6 +37,11 @@
                BlueprintName = "PunchoutTests"
                ReferencedContainer = "container:Punchout.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "PunchoutTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -47,6 +52,11 @@
                BlueprintName = "PunchoutUITests"
                ReferencedContainer = "container:Punchout.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "PunchoutUITests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

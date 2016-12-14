@@ -41,20 +41,19 @@ class Opponent : SKSpriteNode {
     
     // MARK: - Animation Methods
     func animate(){
-        // Makes opponent appear to be moving
+        // Makes opponent appear to be moving by changing the texture
         
         var opponentTextures:[SKTexture] = []
         for i in 0...1 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
         }
-        let opponentAnimation = SKAction.repeatActionForever(SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15))
+        let opponentAnimation = SKAction.repeatActionForever(
+            SKAction.animateWithTextures(opponentTextures, timePerFrame: 0.15))
         self.runAction(opponentAnimation)
-        
     }
     
     func sendPunch(scene: SKScene){
         // Animates opponent punch
-        
         var opponentTextures:[SKTexture] = []
         for i in 2...3 {
             opponentTextures.append(SKTexture(imageNamed: "opponent_\(i)"))
@@ -64,14 +63,14 @@ class Opponent : SKSpriteNode {
         self.runAction(opponentAnimation)
         
         // Assume that opponent hit and preemptively add points
+        // In game scene, we actually take these points off
+        // if the user is able to block it
         score += 3
-        
         framesSincePunch = 0
     }
     
     func sendBlock(scene: SKScene){
         // Animates opponent block
-        
         var opponentTextures:[SKTexture] = []
         opponentTextures.append(SKTexture(imageNamed: "opponent_block"))
         opponentTextures.append(SKTexture(imageNamed: "opponent_1"))
@@ -83,14 +82,12 @@ class Opponent : SKSpriteNode {
     func shouldPunch() -> Bool {
         // Sliding chance that opponent will send a punch
         // More time = more likely to punch
-        
         let slide = UInt32(60 - Int(framesSincePunch)/6)
         if(framesSincePunch > 30) {
             if (Int(arc4random_uniform(slide)) == 1) {
                 return true
             }
         }
-        
         return false
     }
     
@@ -109,7 +106,12 @@ class Opponent : SKSpriteNode {
         score -= 3
     }
     
-    func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat, leftBounds: CGFloat, rightBounds: CGFloat, x: CGFloat, y: CGFloat) -> (CGFloat, CGFloat){
+    // Randomly move the opponetn around in a given bound
+    // Returns a tuple of location that represents the x and y coordinates
+    // of the end location of the opponent
+    func move(scene: SKScene, upperBounds: CGFloat, lowerBounds: CGFloat,
+              leftBounds: CGFloat, rightBounds: CGFloat,
+              x: CGFloat, y: CGFloat) -> (CGFloat, CGFloat){
         var changeDirection = false
         let newX = x - xSpeed
         
